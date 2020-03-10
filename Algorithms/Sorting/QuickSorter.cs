@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Algorithms.Helpers;
 
 namespace Algorithms.Sorting
 {
@@ -50,41 +47,18 @@ namespace Algorithms.Sorting
         private static int Partition(int[] array, int left, int right)
         {
             int mid = (left + right) / 2;
-            if (array[mid] < array[left])
-            {
-                int temp = array[left];
-                array[left] = array[mid];
-                array[mid] = temp;
-            }
-            if (array[right] < array[left])
-            {
-                int temp = array[left];
-                array[left] = array[right];
-                array[right] = temp;
-            }
-            if (array[mid] < array[right])
-            {
-                int temp = array[mid];
-                array[mid] = array[right];
-                array[right] = temp;
-            }
+            if (array[mid] < array[left]) array.Swap(left, mid);
+            if (array[right] < array[left]) array.Swap(left, right);
+            if (array[mid] < array[right]) array.Swap(mid, right);
             int pivot = array[right];
 
             while (true)
             {
-                while (array[left] < pivot) 
-                { 
-                    left++;
-                }
-                while (array[right] > pivot) 
-                { 
-                    right--;
-                }
+                while (array[left] < pivot) left++;
+                while (array[right] > pivot) right--;
                 if (left >= right) return right;
-                
-                int temp = array[left];
-                array[left] = array[right];
-                array[right] = temp;
+
+                array.Swap(left, right);
 
                 // To prevent the algorithm getting stuck when encountering duplicates
                 // a check is made to increment the indexes outside of the while loops.

@@ -1,21 +1,17 @@
-﻿using System;
-using BenchmarkDotNet;
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Order;
+﻿using BenchmarkDotNet.Attributes;
 using Algorithms.Sorting;
 
 namespace Benchmarks
 {
     [MemoryDiagnoser]
-    [Orderer(SummaryOrderPolicy.FastestToSlowest)]
     public class AlgorithmsSortingBenchmarks
     {
         // Setup
         // *********************************************************************
-        static int sizeOfArray = 5_000;
-        int[] randomArray = Utilities.RandomFillIntArray(sizeOfArray);
-        int[] orderedArray = Utilities.FillOrderedArray(sizeOfArray);
-        int[] reversedArray = Utilities.FillReverseOrderedArray(sizeOfArray);
+        static int sizeOfArray = 10_000;
+        int[] randomArray = Utils.RandomFillIntArray(sizeOfArray);
+        int[] orderedArray = Utils.FillOrderedArray(sizeOfArray);
+        int[] reversedArray = Utils.FillReverseOrderedArray(sizeOfArray);
 
         // Benchmarks
         // *********************************************************************
@@ -45,10 +41,16 @@ namespace Benchmarks
         {
             randomArray.QuickSort();
         }
+        // ---- HeapSort
+        [Benchmark]
+        public void RunHeapSortRandom()
+        {
+            randomArray.HeapSort();
+        }
 
         // ---------------------------------------------------------------------
         // Ordered Array Benchmarks
-
+        
         // ---- BubbleSort
         [Benchmark]
         public void RunBubbleSortOrdered()
@@ -73,10 +75,16 @@ namespace Benchmarks
         {
             orderedArray.QuickSort();
         }
-
+        // ---- HeapSort
+        [Benchmark]
+        public void RunHeapSortOrdered()
+        {
+            orderedArray.HeapSort();
+        }
+        
         // ---------------------------------------------------------------------
         // Reverse Ordered Array Benchmarks
-
+        
         // ---- BubbleSort
         [Benchmark]
         public void RunBubbleSortReverse()
@@ -100,6 +108,12 @@ namespace Benchmarks
         public void RunQuickSortReverse()
         {
             reversedArray.QuickSort();
+        }
+        // ---- HeapSort
+        [Benchmark]
+        public void RunHeapSortReverse()
+        {
+            reversedArray.HeapSort();
         }
 
         // ---------------------------------------------------------------------

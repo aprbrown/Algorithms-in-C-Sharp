@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{3EB7E67B-D17F-4981-A21E-3670ABC22CE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsoleApp", "TestConsoleApp\TestConsoleApp.csproj", "{D7240F6A-9503-4F33-A737-2B78B6080CD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{3EB7E67B-D17F-4981-A21E-3670ABC22CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EB7E67B-D17F-4981-A21E-3670ABC22CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EB7E67B-D17F-4981-A21E-3670ABC22CE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7240F6A-9503-4F33-A737-2B78B6080CD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7240F6A-9503-4F33-A737-2B78B6080CD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7240F6A-9503-4F33-A737-2B78B6080CD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7240F6A-9503-4F33-A737-2B78B6080CD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

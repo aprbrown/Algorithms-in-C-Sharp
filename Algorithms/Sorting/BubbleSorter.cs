@@ -1,4 +1,5 @@
 ﻿using System;
+using Algorithms.Helpers;
 
 namespace Algorithms.Sorting
 {
@@ -36,9 +37,7 @@ namespace Algorithms.Sorting
                     // if so, swap values and flag swapped as true for another pass.
                     if (sortedArray[j - 1] > sortedArray[j])
                     {
-                        int temp = sortedArray[j - 1];
-                        sortedArray[j - 1] = sortedArray[j];
-                        sortedArray[j] = temp;
+                        sortedArray.Swap(j - 1, j);
                         swapped = true;
                     }
                 }

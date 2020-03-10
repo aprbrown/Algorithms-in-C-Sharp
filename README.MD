@@ -6,3 +6,4 @@ The purpose of this project is to allow me to explore, understand and implement 
 - Merge Sort
 - Quick Sort
 - Selection Sort
+- Heap Sort
