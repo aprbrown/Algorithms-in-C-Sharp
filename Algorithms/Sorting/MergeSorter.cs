@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SortingAlgorithms
+namespace Algorithms.Sorting
 {
     /// <summary>
     /// An implementation of the Merge Sort algorithm. An array of unsorted items is split in half.
@@ -9,48 +9,47 @@ namespace SortingAlgorithms
     /// the combined smaller arrays. These smaller sorted arrays are then compared with each other and 
     /// sorted in the same way and work back up the recursive chain until a fully sorted array remains.
     /// </summary>
-    public class Merge
+    public static class MergeSorter
     {
-        public static int[] Sort(int[] unsortedArray)
+        public static int[] MergeSort(this int[] unsortedArray)
         {
-            // Create arrays for the left and right split of the incoming array and a result array
-            // the same length as the incoming array.
-            int[] left;
-            int[] right;
-            int[] result = new int[unsortedArray.Length];
+            // If the incoming array is less than or equal to 1, return the incoming array as it is
+            // sorted by definition.
+            if (unsortedArray.Length <= 1)
+            {
+                return unsortedArray;
+            }
+            else
+            {
+                // Create arrays for the left and right split of the incoming array and a result array.
+                int[] left, right, sortedArray;
 
-            // If the incoming array is less than or equal to 1, return the incoming array as no split
-            // is required and it can be considered sorted. This also prevents an infinite loop due to 
-            // the recursive nature of the algorithm.
-            if(unsortedArray.Length <= 1) return unsortedArray;
+                // Determine the mid-point of the incoming array.
+                int midpoint = unsortedArray.Length / 2;
 
-            // Determing the mid-point of the incoming array.
-            int midpoint = unsortedArray.Length / 2;
+                // Initialise the length of the left array to be that of the incoming array's midpoint.
+                left = new int[midpoint];
 
-            // Initialise the length of the left array to be that of the incoming array's midpoint.
-            left = new int[midpoint];
+                // Verify if the incoming array has an even or odd number of values. If it is even then
+                // initialise in the same way as the left side, if it is odd, add one extra value.
+                if (unsortedArray.Length % 2 == 0) right = new int[midpoint];
+                else right = new int[midpoint + 1];
 
-            // Verify if the incoming array has an even or odd number of values. If it is even then
-            // initialise in the same way as the left side, if it is odd, add one extra value.
-            if (unsortedArray.Length % 2 == 0) right = new int[midpoint];
-            else right = new int[midpoint + 1];
+                // Copy the left and right sides of the incoming array into the left and right arrays.
+                Array.Copy(unsortedArray, 0, left, 0, midpoint);
+                Array.Copy(unsortedArray, midpoint, right, 0, unsortedArray.Length - midpoint);
 
-            // Copy the left and right sides of the incoming array into the left and right arrays.
-            Array.Copy(unsortedArray, 0, left, 0, midpoint);
-            Array.Copy(unsortedArray, midpoint, right, 0, unsortedArray.Length - midpoint);
-
-            // Recursively sort both of the new arrays
-            left = Sort(left);
-            right = Sort(right);
-
-            // Merge the sorted lists.
-            result = MergeSort(left, right);
-
-            // Return the final sorted result.
-            return result;
+                // Recursively sort both of the new arrays
+                left = MergeSort(left);
+                right = MergeSort(right);
+                // Merge the sorted lists.
+                sortedArray = Merge(left, right);
+                // Return the final sorted array.
+                return sortedArray;
+            }
         }
 
-        private static int[] MergeSort(int[] left, int[] right)
+        private static int[] Merge(int[] left, int[] right)
         {
             // Create a new array the size of the two incoming lists combined.
             int combinedSize = left.Length + right.Length;

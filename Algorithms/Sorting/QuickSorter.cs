@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SortingAlgorithms
+namespace Algorithms.Sorting
 {
     /// <summary>
     /// An implementation of the quicksort algorithm. A 'pivot' element is chosen from the unsorted
@@ -15,7 +15,7 @@ namespace SortingAlgorithms
     /// memory requirements compared to a solution such as merge-sort reducing the space-complexity
     /// of the algorithm.
     /// </summary>
-    public class Quick
+    public static class QuickSorter
     {
         /// <summary>
         /// Calling Quick.Sort and passing an unsorted integer array will return a new integer array
@@ -23,7 +23,7 @@ namespace SortingAlgorithms
         /// </summary>
         /// <param name="unsortedArray">An integer Array of unsorted elements to be sorted.</param>
         /// <returns>A new integer array containing the elements of the unsorted array in order.</returns>
-        public static int[] Sort(int[] unsortedArray)
+        public static int[] QuickSort(this int[] unsortedArray)
         {
             // Make a copy of the incoming array, preserving its initial order.
             int[] sortedArray = new int[unsortedArray.Length];
@@ -32,18 +32,18 @@ namespace SortingAlgorithms
             // So the caller of the sort doesn't need to specify indexes for the
             // array, a separate sorting method is used leaving implementation detail
             // obfuscated.
-            QuickSort(sortedArray, 0, sortedArray.Length - 1);
+            Sort(sortedArray, 0, sortedArray.Length - 1);
 
             return sortedArray;
         }
 
-        private static void QuickSort(int[] array, int left, int right)
+        private static void Sort(int[] array, int left, int right)
         {
             if (left < right)
             {
                 int pivot = Partition(array, left, right);
-                QuickSort(array, left, pivot);
-                QuickSort(array, pivot + 1, right);
+                Sort(array, left, pivot);
+                Sort(array, pivot + 1, right);
             }
         }
 

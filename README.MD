@@ -5,3 +5,4 @@ The purpose of this project is to allow me to explore, understand and implement 
 - Bubble Sort
 - Merge Sort
 - Quick Sort
+- Selection Sort
