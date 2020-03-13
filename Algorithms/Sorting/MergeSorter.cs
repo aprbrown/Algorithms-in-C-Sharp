@@ -11,13 +11,13 @@ namespace Algorithms.Sorting
     /// </summary>
     public static class MergeSorter
     {
-        public static int[] MergeSort(this int[] unsortedArray)
+        public static int[] MergeSort(this int[] array)
         {
             // If the incoming array is less than or equal to 1, return the incoming array as it is
             // sorted by definition.
-            if (unsortedArray.Length <= 1)
+            if (array.Length <= 1)
             {
-                return unsortedArray;
+                return array;
             }
             else
             {
@@ -25,19 +25,19 @@ namespace Algorithms.Sorting
                 int[] left, right, sortedArray;
 
                 // Determine the mid-point of the incoming array.
-                int midpoint = unsortedArray.Length / 2;
+                int midpoint = array.Length / 2;
 
                 // Initialise the length of the left array to be that of the incoming array's midpoint.
                 left = new int[midpoint];
 
                 // Verify if the incoming array has an even or odd number of values. If it is even then
                 // initialise in the same way as the left side, if it is odd, add one extra value.
-                if (unsortedArray.Length % 2 == 0) right = new int[midpoint];
+                if (array.Length % 2 == 0) right = new int[midpoint];
                 else right = new int[midpoint + 1];
 
                 // Copy the left and right sides of the incoming array into the left and right arrays.
-                Array.Copy(unsortedArray, 0, left, 0, midpoint);
-                Array.Copy(unsortedArray, midpoint, right, 0, unsortedArray.Length - midpoint);
+                Array.Copy(array, 0, left, 0, midpoint);
+                Array.Copy(array, midpoint, right, 0, array.Length - midpoint);
 
                 // Recursively sort both of the new arrays
                 left = MergeSort(left);

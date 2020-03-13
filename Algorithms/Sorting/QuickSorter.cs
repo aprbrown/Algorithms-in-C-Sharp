@@ -18,20 +18,14 @@ namespace Algorithms.Sorting
         /// Calling Quick.Sort and passing an unsorted integer array will return a new integer array
         /// sorted in order from lowest to highest.
         /// </summary>
-        /// <param name="unsortedArray">An integer Array of unsorted elements to be sorted.</param>
+        /// <param name="array">An integer Array of unsorted elements to be sorted.</param>
         /// <returns>A new integer array containing the elements of the unsorted array in order.</returns>
-        public static int[] QuickSort(this int[] unsortedArray)
+        public static void QuickSort(this int[] array)
         {
-            // Make a copy of the incoming array, preserving its initial order.
-            int[] sortedArray = new int[unsortedArray.Length];
-            Array.Copy(unsortedArray, sortedArray, unsortedArray.Length);
-
             // So the caller of the sort doesn't need to specify indexes for the
             // array, a separate sorting method is used leaving implementation detail
             // obfuscated.
-            Sort(sortedArray, 0, sortedArray.Length - 1);
-
-            return sortedArray;
+            Sort(array, 0, array.Length - 1);
         }
 
         private static void Sort(int[] array, int left, int right)

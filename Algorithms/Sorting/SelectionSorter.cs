@@ -11,41 +11,35 @@ namespace Algorithms.Sorting
     /// </summary>
     public static class SelectionSorter
     {
-        public static int[] SelectionSort(this int[] unsortedArray)
+        public static void SelectionSort(this int[] array)
         {
-            // Make a copy of the incoming array, preserving its initial order.
-            int[] sortedArray = new int[unsortedArray.Length];
-            Array.Copy(unsortedArray, sortedArray, unsortedArray.Length);
-
             // Outer loop covering entire array
-            for (int i = 0; i < sortedArray.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 // Initialise min value to compare with the current location of
                 // outer loop
-                int min = sortedArray[i];
+                int min = array[i];
                 // Not the index of the min value
                 int minIndex = i;
                 // Inner loop iterating over values above current position of 
                 // outer loop
-                for (int j = i + 1; j < sortedArray.Length; j++)
+                for (int j = i + 1; j < array.Length; j++)
                 {
                     // If the value in the inner loop is lower than current min
                     // value, replace min and minIndex with the current information.
-                    if (sortedArray[j] < min) 
+                    if (array[j] < min) 
                     { 
-                        min = sortedArray[j];
+                        min = array[j];
                         minIndex = j;
                     }
                 }
                 // Swap current outer value with that of the newly found lower value.
                 if (minIndex != i)
                 {
-                    sortedArray[minIndex] = sortedArray[i];
-                    sortedArray[i] = min;
+                    array[minIndex] = array[i];
+                    array[i] = min;
                 }
             }
-
-            return sortedArray;
         }
     }
 }

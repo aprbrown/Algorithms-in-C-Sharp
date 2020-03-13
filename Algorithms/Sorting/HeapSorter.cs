@@ -13,26 +13,20 @@ namespace Algorithms.Sorting
     /// </summary>
     public static class HeapSorter
     {
-        public static int[] HeapSort(this int[] unsortedArray)
+        public static void HeapSort(this int[] array)
         {
-            // Make a copy of the incoming array, preserving its initial order.
-            int[] sortedArray = new int[unsortedArray.Length];
-            Array.Copy(unsortedArray, sortedArray, unsortedArray.Length);
-
             // Build the heap in the array so that the largest value is at the root
-            BuildMaxHeap(sortedArray);
+            BuildMaxHeap(array);
 
             // Loop so that values in array[0:end] is a heap and elements after are
             // greater than those before.
-            int end = sortedArray.Length - 1;
+            int end = array.Length - 1;
             while (end > 0)
             {
-                sortedArray.Swap(0, end);
+                array.Swap(0, end);
                 end--;
-                SiftDown(sortedArray, 0, end);
+                SiftDown(array, 0, end);
             }
-            
-            return sortedArray;
         }
 
         // Build the heap so that the maximum value is placed at index 0;

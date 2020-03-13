@@ -1,4 +1,5 @@
-﻿using Algorithms.Sorting;
+﻿using System;
+using Algorithms.Sorting;
 using System.Linq;
 using Xunit;
 
@@ -12,14 +13,16 @@ namespace Testing.AlgorithmsTests
         [Fact]
         public void BubbleSortTest()
         {
-            int[] sortedArray = unorderedArray.BubbleSort();
+            int[] sortedArray = CopyFullArray(unorderedArray);
+            sortedArray.BubbleSort();
             Assert.True(sortedArray.SequenceEqual(expectedSortedArray));
         }
 
         [Fact]
         public void SelectionSortTest()
         {
-            int[] sortedArray = unorderedArray.SelectionSort();
+            int[] sortedArray = CopyFullArray(unorderedArray);
+            sortedArray.SelectionSort();
             Assert.True(sortedArray.SequenceEqual(expectedSortedArray));
         }
 
@@ -33,15 +36,33 @@ namespace Testing.AlgorithmsTests
         [Fact]
         public void QuickSortTest()
         {
-            int[] sortedArray = unorderedArray.QuickSort();
+            int[] sortedArray = CopyFullArray(unorderedArray);
+            sortedArray.QuickSort();
             Assert.True(sortedArray.SequenceEqual(expectedSortedArray));
         }
 
         [Fact]
         public void HeapSortTest()
         {
-            int[] sortedArray = unorderedArray.HeapSort();
+            int[] sortedArray = CopyFullArray(unorderedArray);
+            sortedArray.HeapSort();
             Assert.True(sortedArray.SequenceEqual(expectedSortedArray));
+        }
+
+        [Fact]
+        public void InsertionSortTest()
+        {
+            int[] sortedArray = CopyFullArray(unorderedArray);
+            sortedArray.InsertionSort();
+            Assert.True(sortedArray.SequenceEqual(expectedSortedArray));
+        }
+
+        // Utility method
+        static int[] CopyFullArray(int[] arrayToCopy)
+        {
+            int[] array = new int[arrayToCopy.Length];
+            Array.Copy(arrayToCopy, array, arrayToCopy.Length);
+            return array;
         }
     }
 }
