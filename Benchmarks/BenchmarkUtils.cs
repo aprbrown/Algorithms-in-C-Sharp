@@ -1,7 +1,10 @@
-﻿// <copyright file="BenchmarkUtils.cs" company="Andrew P R Brown">
+﻿// -----------------------------------------------------------------------------
+// <copyright file="BenchmarkUtils.cs" company="Andrew P R Brown">
 // Copyright (c) Andrew P R Brown. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// Licensed under the MIT license. See LICENSE file in the project root for full
+// license information.
 // </copyright>
+// -----------------------------------------------------------------------------
 
 namespace Benchmarks
 {
