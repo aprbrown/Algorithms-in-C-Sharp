@@ -6,7 +6,7 @@ The purpose of this project is to allow me to explore, understand and implement 
 
 ### Insertion Method
 
- - Insertion Sort (In Progress)
+- Insertion Sort
 
 ### Selection Method
 

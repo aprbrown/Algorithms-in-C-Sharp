@@ -1,73 +1,135 @@
-﻿using System;
-using Algorithms.Helpers;
+﻿// <copyright file="HeapSorter.cs" company="Andrew P R Brown">
+// Copyright (c) Andrew P R Brown. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace Algorithms.Sorting
 {
-    /// <summary>
-    /// An implementation of the HeapSort algorithm. The incoming array is first ordered
-    /// into a max heap, such that the max value is located at index 0 and when visualised
-    /// in a binary tree, no child element should be larger than a parent element. The first
-    /// element is then switched with the last and 'removed' from the heap. The remaining 
-    /// values are then sorted into a max heap again and the process repeats with the first
-    /// element being replaced with the last in the heap.
-    /// </summary>
-    public static class HeapSorter
-    {
-        public static void HeapSort(this int[] array)
-        {
-            // Build the heap in the array so that the largest value is at the root
-            BuildMaxHeap(array);
+	using Algorithms.Helpers;
 
-            // Loop so that values in array[0:end] is a heap and elements after are
-            // greater than those before.
-            int end = array.Length - 1;
-            while (end > 0)
-            {
-                array.Swap(0, end);
-                end--;
-                SiftDown(array, 0, end);
-            }
-        }
+	/// <summary>
+	/// Implementation of the Heap Sort Algorithm, organizing an array into a
+	/// heap, then dividing the array into a sorted and unsorted section. After
+	/// a new element is added to the sorted section, the unsorted section is
+	/// reorganized into a heap and then a new element is added to the sorted
+	/// section until the entire array is sorted.
+	/// </summary>
+	public static class HeapSorter
+	{
+		/// <summary>
+		/// Public method to be called on an array ordering it from lowest to
+		/// highest using the HeapSort algorithm.
+		/// </summary>
+		/// <param name="array">An integer array to be sorted.</param>
+		public static void HeapSort(this int[] array)
+		{
+			if (array == null || array.Length < 2)
+			{
+				return;
+			}
 
-        // Build the heap so that the maximum value is placed at index 0;
-        private static void BuildMaxHeap(int[] array)
-        {
-            for (int i = (array.Length / 2); i >= 0; i--) MaxHeapify(array, i);
-        }
+			MaxHeapify(array, array.Length);
 
-        private static void MaxHeapify(int[] array, int i)
-        {
-            int left = 2 * i;
-            int right = (2 * i) + 1;
-            int largest = i;
+			int end = array.Length - 1;
+			while (end > 0)
+			{
+				array.Swap(end, 0);
+				end--;
+				SiftDown(array, 0, end);
+			}
+		}
 
-            if (left < array.Length && array[left] > array[largest]) largest = left;
-            if (right < array.Length && array[right] > array[largest]) largest = right;
-            if (largest != i)
-            {
-                array.Swap(i, largest);
-                MaxHeapify(array, largest);
-            }
-        }
+		/// <summary>
+		/// Reorders an incoming array in such a way that when visualized as
+		/// a binary tree the max value is the top node and no child is larger
+		/// than its parent.
+		/// </summary>
+		/// <param name="array">The integer array to be formed as a
+		/// heap.</param>
+		/// <param name="length">The max value in the array to be considered for
+		/// the heap.</param>
+		private static void MaxHeapify(int[] array, int length)
+		{
+			int start = ParentIndex(length - 1);
 
-        // Rebuild the heap for a subsection of the array.
-        private static void SiftDown(int[] array, int start, int end)
-        {
-            int root = start;
-            while (2 * root + 1 <= end)
-            {
-                int child = 2 * root + 1;
-                int swap = root;
+			while (start >= 0)
+			{
+				SiftDown(array, start, length - 1);
+				start--;
+			}
+		}
 
-                if (array[swap] < array[child]) swap = child;
-                if (child + 1 <= end && array[swap] < array[child + 1]) swap = child + 1;
-                if (swap == root) return;
-                else
-                {
-                    array.Swap(root, swap);
-                    root = swap;
-                }
-            }
-        }
-    }
+		/// <summary>
+		/// Repairs the incoming heap whose root element is located at the index
+		/// 'start' and final child element located at index 'end'.
+		/// </summary>
+		/// <param name="array">A heap in the form of an integer array.</param>
+		/// <param name="start">The index of the root element.</param>
+		/// <param name="end">Index of the final element in this branch.</param>
+		private static void SiftDown(int[] array, int start, int end)
+		{
+			int root = start;
+
+			while (LeftChildIndex(root) <= end)
+			{
+				int child = LeftChildIndex(root);
+				int swap = root;
+
+				if (array[swap] < array[child])
+				{
+					swap = child;
+				}
+
+				if (child + 1 <= end && array[swap] < array[child + 1])
+				{
+					swap = child + 1;
+				}
+
+				if (swap == root)
+				{
+					return;
+				}
+				else
+				{
+					array.Swap(root, swap);
+					root = swap;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Given an index, calculate the index of its parent node.
+		/// </summary>
+		/// <param name="index">Index from which to determine a parent
+		/// node.</param>
+		/// <returns>Index of Parent node.</returns>
+		private static int ParentIndex(int index)
+		{
+			return (index - 1) / 2;
+		}
+
+		/// <summary>
+		/// Given an index, calculate the index of child element on the left
+		/// hand side.
+		/// </summary>
+		/// <param name="index">Index from which to determine left child
+		/// node.</param>
+		/// <returns>Index of left child node.</returns>
+		private static int LeftChildIndex(int index)
+		{
+			return (2 * index) + 1;
+		}
+
+		/// <summary>
+		/// Given an index, calculate the index of child element on the right
+		/// hand side.
+		/// </summary>
+		/// <param name="index">Index from which to determine right child
+		/// node.</param>
+		/// <returns>Index of right child node.</returns>
+		private static int RightChildIndex(int index)
+		{
+			return (2 * index) + 2;
+		}
+	}
 }

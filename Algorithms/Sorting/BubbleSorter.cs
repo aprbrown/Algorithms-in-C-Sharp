@@ -1,50 +1,52 @@
-﻿using System;
-using Algorithms.Helpers;
+﻿// <copyright file="BubbleSorter.cs" company="Andrew P R Brown">
+// Copyright (c) Andrew P R Brown. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace Algorithms.Sorting
 {
-    /// <summary>
-    /// An implementation of the Bubble Sort algorithm. Given an unsorted array, iterate over
-    /// the array and compare two values, if the value on the left is greater than the value
-    /// on the right, swap the values. Repeat from the beginning until a full pass over the
-    /// array is made without any swaps.
-    /// </summary>
-    public static class BubbleSorter
-    {
-        public static void BubbleSort(this int[] array)
-        {
-            // iterations and swapped are to help with optimisation.
-            int iterations = array.Length;
-            bool swapped = false;
+	using Algorithms.Helpers;
 
-            // Outer loop stepping over the entirety of the array.
-            for (int i = 0; i < array.Length; i++)
-            {
-                // Reset swapped to false at the start of the loop.
-                swapped = false;
+	/// <summary>
+	/// Implementation of the Bubble Sort Algorithm. Stepping through a list and
+	/// comparing two items, swapping them if they are in the wrong order. The
+	/// process repeats until no swaps are made for
+	/// an entire pass.
+	/// </summary>
+	public static class BubbleSorter
+	{
+		/// <summary>
+		/// Public method to be called on an array ordering it from lowest to
+		/// highest using the Bubble Sort algorithm.
+		/// </summary>
+		/// <param name="array">An integer array to be sorted.</param>
+		public static void BubbleSort(this int[] array)
+		{
+			if (array == null || array.Length < 2)
+			{
+				return;
+			}
 
-                // Inner loop to swap items in the array so the element on the left is
-                // lower than the element on the right. The number of iterations for the 
-                // loop is reduced each time since the final value will be in the correct
-                // position.
-                for (int j = 1; j < iterations; j++)
-                {
-                    // Check if the item on the left is greater than the item on the right
-                    // if so, swap values and flag swapped as true for another pass.
-                    if (array[j - 1] > array[j])
-                    {
-                        array.Swap(j - 1, j);
-                        swapped = true;
-                    }
-                }
-                // Reduce the number of iterations as final item in last run will now be in the
-                // correct place.
-                iterations--;
+			int iterations = array.Length;
+			bool swapped;
+			for (int i = 0; i < array.Length; i++)
+			{
+				swapped = false;
+				for (int j = 1; j < iterations; j++)
+				{
+					if (array[j - 1] > array[j])
+					{
+						array.Swap(j - 1, j);
+						swapped = true;
+					}
+				}
 
-                // If there were no swaps made in the loop then the array is in order, break out
-                // of the outer loop.
-                if (!swapped) break;
-            }
-        }
-    }
+				iterations--;
+				if (!swapped)
+				{
+					break;
+				}
+			}
+		}
+	}
 }

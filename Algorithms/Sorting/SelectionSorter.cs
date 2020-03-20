@@ -1,45 +1,51 @@
-﻿using System;
+﻿// <copyright file="SelectionSorter.cs" company="Andrew P R Brown">
+// Copyright (c) Andrew P R Brown. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 namespace Algorithms.Sorting
 {
-    /// <summary>
-    /// An implementation of the Selection Sort algorithm. The algorithm uses two
-    /// loops an outer and inner. The inner loop finds the smallest value in the
-    /// remaining values of the outer loop. When the lowest number is found it is
-    /// swapped with the position of the outer loop. Once the outer loop is complete
-    /// the array will be in order.
-    /// </summary>
-    public static class SelectionSorter
-    {
-        public static void SelectionSort(this int[] array)
-        {
-            // Outer loop covering entire array
-            for (int i = 0; i < array.Length; i++)
-            {
-                // Initialise min value to compare with the current location of
-                // outer loop
-                int min = array[i];
-                // Not the index of the min value
-                int minIndex = i;
-                // Inner loop iterating over values above current position of 
-                // outer loop
-                for (int j = i + 1; j < array.Length; j++)
-                {
-                    // If the value in the inner loop is lower than current min
-                    // value, replace min and minIndex with the current information.
-                    if (array[j] < min) 
-                    { 
-                        min = array[j];
-                        minIndex = j;
-                    }
-                }
-                // Swap current outer value with that of the newly found lower value.
-                if (minIndex != i)
-                {
-                    array[minIndex] = array[i];
-                    array[i] = min;
-                }
-            }
-        }
-    }
+	/// <summary>
+	/// Implementation of the Selection Sort Algorithm. The array is divided in
+	/// two, a sorted sub-list at the left of the array and remaining unsorted
+	/// elements to the right. Iterating over the unsorted elements, the lowest
+	/// value is found and swapped with the leftmost value (of unsorted
+	/// elements) adding it to the end of the sorted sub-list. This repeats
+	/// until the list is sorted.
+	/// </summary>
+	public static class SelectionSorter
+	{
+		/// <summary>
+		/// Public method to be called on an array ordering it from lowest to
+		/// highest using the Selection Sort algorithm.
+		/// </summary>
+		/// <param name="array">An integer array to be sorted.</param>
+		public static void SelectionSort(this int[] array)
+		{
+			if (array == null || array.Length < 2)
+			{
+				return;
+			}
+
+			for (int i = 0; i < array.Length; i++)
+			{
+				int min = array[i];
+				int minIndex = i;
+				for (int j = i + 1; j < array.Length; j++)
+				{
+					if (array[j] < min)
+					{
+						min = array[j];
+						minIndex = j;
+					}
+				}
+
+				if (minIndex != i)
+				{
+					array[minIndex] = array[i];
+					array[i] = min;
+				}
+			}
+		}
+	}
 }
