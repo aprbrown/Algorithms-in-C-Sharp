@@ -33,10 +33,7 @@ namespace Algorithms.Sorting
 		public static void QuickSort(
 			this int[] array, int left = 0, int right = -1)
 		{
-			if (array == null || array.Length < 2)
-			{
-				return;
-			}
+			if (array == null || array.Length < 2) return;
 
 			if (right == -1)
 			{

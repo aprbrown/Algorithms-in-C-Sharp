@@ -11,12 +11,15 @@ namespace Benchmarks
 	using Algorithms.Helpers;
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
+	using BenchmarkDotNet.Order;
 
 	/// <summary>
 	/// A suite of benchmarks to test a variety of sorting algorithms against an
 	/// array which is already in order.
 	/// </summary>
 	[MemoryDiagnoser]
+	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
+	[RankColumn]
 	public class SortingBenchmarksOrderedArray
 	{
 		/// <summary>
@@ -40,11 +43,16 @@ namespace Benchmarks
 		// -- Insertion Methods ------------------------------------------------
 
 		/// <summary>
-		/// Benchmark the Insertion Sort Algorithm and assign its performance as
-		/// the baseline others will be compared to.
+		/// Benchmark the Insertion Sort Algorithm.
 		/// </summary>
 		[Benchmark]
 		public void InsertionSortOrdered() => this.orderedArray.InsertionSort();
+
+		/// <summary>
+		/// Benchmark the Tree Sort Algorithm.
+		/// </summary>
+		[Benchmark]
+		public void TreeSortOrdered() => this.orderedArray.TreeSort();
 
 		// -- Selection Methods ------------------------------------------------
 

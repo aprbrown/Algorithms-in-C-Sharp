@@ -11,12 +11,15 @@ namespace Benchmarks
 	using Algorithms.Helpers;
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
+	using BenchmarkDotNet.Order;
 
 	/// <summary>
 	/// A suite of benchmarks to test a variety of sorting algorithms against a
 	/// randomly ordered array.
 	/// </summary>
 	[MemoryDiagnoser]
+	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
+	[RankColumn]
 	public class SortingBenchmarksRandomArray
 	{
 		/// <summary>
@@ -40,8 +43,7 @@ namespace Benchmarks
 		// -- Insertion Methods ------------------------------------------------
 
 		/// <summary>
-		/// Benchmark the Insertion Sort Algorithm and assign its performance as
-		/// the baseline others will be compared to.
+		/// Benchmark the Insertion Sort Algorithm.
 		/// </summary>
 		[Benchmark]
 		public void InsertionSortRandom()
@@ -49,6 +51,17 @@ namespace Benchmarks
 			int[] insertionSortRandom =
 				ArrayUtils.CopyFullArray(this.randomArray);
 			insertionSortRandom.InsertionSort();
+		}
+
+		/// <summary>
+		/// Benchmark the Tree Sort Algorithm.
+		/// </summary>
+		[Benchmark]
+		public void TreeSortRandom()
+		{
+			int[] treeSortRandom =
+				ArrayUtils.CopyFullArray(this.randomArray);
+			treeSortRandom.TreeSort();
 		}
 
 		// -- Selection Methods ------------------------------------------------

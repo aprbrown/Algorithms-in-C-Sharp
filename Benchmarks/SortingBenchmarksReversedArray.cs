@@ -12,12 +12,15 @@ namespace Benchmarks
 	using Algorithms.Helpers;
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
+	using BenchmarkDotNet.Order;
 
 	/// <summary>
 	/// A suite of benchmarks to test a variety of sorting algorithms against an
 	/// array which is reverse order (highest to lowest).
 	/// </summary>
 	[MemoryDiagnoser]
+	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
+	[RankColumn]
 	public class SortingBenchmarksReversedArray
 	{
 		/// <summary>
@@ -51,6 +54,17 @@ namespace Benchmarks
 			int[] insertionSortReverse =
 				ArrayUtils.CopyFullArray(this.reversedArray);
 			insertionSortReverse.InsertionSort();
+		}
+
+		/// <summary>
+		/// Benchmark the Tree Sort Algorithm.
+		/// </summary>
+		[Benchmark]
+		public void TreeSortRandom()
+		{
+			int[] treeSortReverse =
+				ArrayUtils.CopyFullArray(this.reversedArray);
+			treeSortReverse.TreeSort();
 		}
 
 		// -- Selection Methods ------------------------------------------------
