@@ -8,38 +8,76 @@
 
 namespace Algorithms.Sorting
 {
+	using System;
+	using System.Collections.Generic;
 	using Algorithms.Helpers;
 
 	/// <summary>
-	/// Implementation of the Bubble Sort Algorithm. Stepping through a list and
-	/// comparing two items, swapping them if they are in the wrong order. The
-	/// process repeats until no swaps are made for
-	/// an entire pass.
+	/// Implementation of the Bubble Sort algorithm to sort a list of elements.
+	/// The algorithm iterates over the list and compares two adjacent elements,
+	/// if the elements are in the wrong order they are swapped. At the end of
+	/// an iteration the final element will be in order. The process repeats up
+	/// until the last element from the previous iteration. If no swaps are made
+	/// during an iteration then the list is in order and the process ends.
 	/// </summary>
 	public static class BubbleSorter
 	{
 		/// <summary>
-		/// Public method to be called on an array ordering it from lowest to
-		/// highest using the Bubble Sort algorithm.
+		/// Public method to invoke Bubble Sort on a list to order it from
+		/// lowest to highest or highest to lowest.
 		/// </summary>
-		/// <param name="array">An integer array to be sorted.</param>
-		public static void BubbleSort(this int[] array)
+		/// <typeparam name="T">Type of element to be sorted.</typeparam>
+		/// <param name="list">List to be sorted.</param>
+		/// <param name="reversed">Whether list should be sorted low to high
+		/// (false) or high to low (true).</param>
+		public static void BubbleSort<T>(
+			this IList<T> list, bool reversed = false)
+			where T : IComparable<T>
 		{
-			if (array == null || array.Length < 2)
-			{
-				return;
-			}
+			if (list == null || list.Count < 2) return;
 
-			int iterations = array.Length;
+			if (reversed) list.Reversed();
+			else list.Ordered();
+		}
+
+		private static void Ordered<T>(this IList<T> list)
+			where T : IComparable<T>
+		{
+			int iterations = list.Count;
 			bool swapped;
-			for (int i = 0; i < array.Length; i++)
+			for (int i = 0; i < list.Count; i++)
 			{
 				swapped = false;
 				for (int j = 1; j < iterations; j++)
 				{
-					if (array[j - 1] > array[j])
+					if (list[j - 1].CompareTo(list[j]) > 0)
 					{
-						array.Swap(j - 1, j);
+						list.Swap(j - 1, j);
+						swapped = true;
+					}
+				}
+
+				iterations--;
+				if (!swapped)
+				{
+					break;
+				}
+			}
+		}
+
+		private static void Reversed<T>(this IList<T> list)
+			where T : IComparable<T>
+		{
+			int iterations = list.Count;
+			bool swapped;
+			for (int i = 0; i < list.Count; i++)
+			{
+				swapped = false;
+				for (int j = 1; j < iterations; j++)
+				{
+					if (list[j - 1].CompareTo(list[j]) < 0)
+					{
+						list.Swap(j - 1, j);
 						swapped = true;
 					}
 				}

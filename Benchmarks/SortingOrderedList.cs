@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------------
-// <copyright file="SortingBenchmarksOrderedArray.cs" company="Andrew P R Brown">
+// <copyright file="SortingOrderedList.cs" company="Andrew P R Brown">
 // Copyright (c) Andrew P R Brown. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full
 // license information.
@@ -8,34 +8,24 @@
 
 namespace Benchmarks
 {
-	using Algorithms.Helpers;
+	using System.Collections.Generic;
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
 	using BenchmarkDotNet.Order;
 
-	/// <summary>
-	/// A suite of benchmarks to test a variety of sorting algorithms against an
-	/// array which is already in order.
-	/// </summary>
 	[MemoryDiagnoser]
 	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 	[RankColumn]
-	public class SortingBenchmarksOrderedArray
+	public class SortingOrderedList
 	{
-		/// <summary>
-		/// Integer array for algorithms to be benchmarked against.
-		/// </summary>
-		private int[] orderedArray;
+		private readonly int sizeOfList = Program.SizeOfList;
+		private List<int> sortedList;
 
-		/// <summary>
-		/// Method to be called before running each benchmark. Generating a
-		/// fresh array to run the benchmark against.
-		/// </summary>
 		[GlobalSetup]
 		public void GlobalSetup()
 		{
-			int sizeOfArray = Program.SizeOfArray;
-			this.orderedArray = ArrayUtils.FillOrderedArray(sizeOfArray);
+			this.sortedList =
+				BenchmarkUtils.GetOrderedListFromFile(this.sizeOfList);
 		}
 
 		// ** Ordered Array Benchmarks *****************************************
@@ -46,13 +36,21 @@ namespace Benchmarks
 		/// Benchmark the Insertion Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void InsertionSortOrdered() => this.orderedArray.InsertionSort();
+		public void InsertionSort()
+		{
+			List<int> insertionSortOrdered = new List<int>(this.sortedList);
+			insertionSortOrdered.InsertionSort();
+		}
 
 		/// <summary>
 		/// Benchmark the Tree Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void TreeSortOrdered() => this.orderedArray.TreeSort();
+		public void TreeSort()
+		{
+			List<int> treeSortOrdered = new List<int>(this.sortedList);
+			treeSortOrdered.TreeSort();
+		}
 
 		// -- Selection Methods ------------------------------------------------
 
@@ -60,13 +58,21 @@ namespace Benchmarks
 		/// Benchmark the Selection Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void SelectionSortOrdered() => this.orderedArray.SelectionSort();
+		public void SelectionSort()
+		{
+			List<int> selectionSortOrdered = new List<int>(this.sortedList);
+			selectionSortOrdered.SelectionSort();
+		}
 
 		/// <summary>
 		/// Benchmark the Heap Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void HeapSortOrdered() => this.orderedArray.HeapSort();
+		public void HeapSort()
+		{
+			List<int> heapSortOrdered = new List<int>(this.sortedList);
+			heapSortOrdered.HeapSort();
+		}
 
 		// -- Merging Methods --------------------------------------------------
 
@@ -74,7 +80,11 @@ namespace Benchmarks
 		/// Benchmark the Merge Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void MergeSortOrdered() => this.orderedArray.MergeSort();
+		public void MergeSort()
+		{
+			List<int> mergeSortOrdered = new List<int>(this.sortedList);
+			mergeSortOrdered.MergeSort();
+		}
 
 		// -- Partitioning Methods ---------------------------------------------
 
@@ -82,14 +92,29 @@ namespace Benchmarks
 		/// Benchmark the Quick Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void QuickSortOrdered() => this.orderedArray.QuickSort();
+		public void QuickSort()
+		{
+			List<int> quickSortOrdered = new List<int>(this.sortedList);
+			quickSortOrdered.QuickSort();
+		}
 
 		// -- Exchanging Methods -----------------------------------------------
 
 		/// <summary>
 		/// Benchmark the Bubble Sort Algorithm.
 		/// </summary>
-		[Benchmark(Baseline = true)]
-		public void BubbleSortOrdered() => this.orderedArray.BubbleSort();
+		[Benchmark]
+		public void BubbleSort()
+		{
+			List<int> bubbleSortOrdered = new List<int>(this.sortedList);
+			bubbleSortOrdered.BubbleSort();
+		}
+
+		[GlobalCleanup]
+		public void GlobalCleanup()
+		{
+			this.sortedList =
+				BenchmarkUtils.GetOrderedListFromFile(this.sizeOfList);
+		}
 	}
 }

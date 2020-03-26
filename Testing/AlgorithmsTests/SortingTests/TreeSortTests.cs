@@ -8,73 +8,57 @@
 
 namespace Testing.AlgorithmsTests.SortingTests
 {
-	using System;
-	using Algorithms.Helpers;
+	using System.Collections.Generic;
 	using Algorithms.Sorting;
 	using Xunit;
 	using Xunit.Abstractions;
 
-	/// <summary>
-	/// Suite of tests for the TreeSorter class.
-	/// </summary>
 	public class TreeSortTests
 	{
 		private readonly ITestOutputHelper output;
+		private readonly SortingTests sT = SortingTests.Instance;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TreeSortTests"/>
-		/// class.
-		/// </summary>
-		/// <param name="output">Instance of ITestOutputHelper.</param>
 		public TreeSortTests(ITestOutputHelper output)
 		{
 			this.output = output;
 		}
 
-		/// <summary>
-		/// Test that an array of 25 Random integers is correctly sorted with
-		/// Tree Sort.
-		/// </summary>
 		[Fact]
-		public void TreeSortAnArrayOfTwentyFiveRandomIntegers()
+		public void TreeSortWillOrderAListOf25ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomTwentyFiveArray();
-			int[] sorted = SortingTestHelpers.GetSortedTwentyFiveArray();
+			IList<int> random = this.sT.GetRandom25();
+			IList<int> sorted = this.sT.GetOrdered25();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random.TreeSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
 
-		/// <summary>
-		/// Test that an array of 50 Random integers is correctly sorted with
-		/// Tree Sort.
-		/// </summary>
 		[Fact]
-		public void TreeSortAnArrayOfFiftyRandomIntegers()
+		public void TreeSortWillOrderAListOf50ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomFiftyArray();
-			int[] sorted = SortingTestHelpers.GetSortedFiftyArray();
+			IList<int> random = this.sT.GetRandom50();
+			IList<int> sorted = this.sT.GetOrdered50();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random.TreeSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
@@ -84,21 +68,21 @@ namespace Testing.AlgorithmsTests.SortingTests
 		/// Tree Sort.
 		/// </summary>
 		[Fact]
-		public void TreeSortAnArrayOfOneHundredRandomIntegers()
+		public void TreeSortWillOrderAListOf100ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomHundredArray();
-			int[] sorted = SortingTestHelpers.GetSortedHundredArray();
+			IList<int> random = this.sT.GetRandom100();
+			IList<int> sorted = this.sT.GetOrdered100();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random.TreeSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
@@ -109,9 +93,9 @@ namespace Testing.AlgorithmsTests.SortingTests
 		[Fact]
 		public void CallingTreeSortOnANullReturnsNull()
 		{
-			int[] nullArray = null;
-			nullArray.TreeSort();
-			Assert.Null(nullArray);
+			IList<int> nullList = null;
+			nullList.TreeSort();
+			Assert.Null(nullList);
 		}
 
 		/// <summary>
@@ -121,7 +105,7 @@ namespace Testing.AlgorithmsTests.SortingTests
 		[Fact]
 		public void CallingTreeSortOnAnEmptyArrayReturnsEmptyArray()
 		{
-			int[] empty = Array.Empty<int>();
+			IList<int> empty = new List<int>();
 			empty.TreeSort();
 			Assert.Empty(empty);
 		}

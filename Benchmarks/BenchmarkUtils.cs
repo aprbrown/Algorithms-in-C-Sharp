@@ -12,151 +12,203 @@ namespace Benchmarks
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
-	using Algorithms.Helpers;
+	using System.Runtime.Serialization.Formatters.Binary;
 
-	/// <summary>
-	/// Utility methods for use in the Benchmarks package.
-	/// </summary>
 	internal static class BenchmarkUtils
 	{
-		/// <summary>
-		/// Method to check if a file of the required array length already
-		/// exists, if it does then read the existing file and populate an array
-		/// then return it. If not create a new file from a randomly generated
-		/// array and then return the array. The purpose of this is so each
-		/// benchmark is operating against the same array.
-		/// </summary>
-		/// <param name="sizeOfArray">Integer to determine the size of the
-		/// returned array.</param>
-		/// <returns>An integer array in random order.</returns>
-		internal static int[] TestArray(int sizeOfArray)
+		public static List<int> GetOrderedListFromFile(int sizeOfList)
 		{
-			Dictionary<string, string> directoryPaths =
-				GetDirectoryPaths(sizeOfArray);
+			Dictionary<string, string> paths =
+				GetDirectoryPaths(sizeOfList);
 
-			int[] testArray = new int[sizeOfArray];
+			List<int> list;
+			string path = paths["orderedListFile"];
 
-			if (!File.Exists(directoryPaths["randomArrayFile"]))
+			if (!File.Exists(path))
 			{
-				using StreamWriter sw =
-					File.CreateText(directoryPaths["randomArrayFile"]);
-				testArray = ArrayUtils.RandomisedArray(sizeOfArray);
-				foreach (int number in testArray)
-				{
-					sw.WriteLine(number);
-				}
+				list = GetRandomListFromFile(sizeOfList);
+				list.Sort();
+
+				Stream stream = File.Open(path, FileMode.Create);
+				BinaryFormatter bin = new BinaryFormatter();
+				bin.Serialize(stream, list);
+				stream.Close();
 			}
 			else
 			{
-				using StreamReader sr =
-					File.OpenText(directoryPaths["randomArrayFile"]);
-				string s;
-				for (int i = 0; i < sizeOfArray; i++)
-				{
-					if ((s = sr.ReadLine()) != null)
-					{
-						testArray[i] = int.Parse(
-						s, CultureInfo.CurrentCulture);
-					}
-				}
+				Stream stream = File.Open(path, FileMode.Open);
+				BinaryFormatter bin = new BinaryFormatter();
+				list = (List<int>)bin.Deserialize(stream);
+				stream.Close();
 			}
 
-			return testArray;
+			return list;
 		}
 
-		/// <summary>
-		/// Creates a set of directories to store artifacts relating to the
-		/// Benchmarks being run if they do not already exist.
-		/// </summary>
-		/// <param name="sizeOfArray">integer of array size to generate paths
-		/// relevant to the benchmarks being run.</param>
+		public static List<int> GetReverseOrderedListFromFile(int sizeOfList)
+		{
+			Dictionary<string, string> paths =
+				GetDirectoryPaths(sizeOfList);
+
+			List<int> list;
+			string path = paths["reversedListFile"];
+
+			if (!File.Exists(path))
+			{
+				list = GetOrderedListFromFile(sizeOfList);
+				list.Reverse();
+
+				Stream stream = File.Open(path, FileMode.Create);
+				BinaryFormatter bin = new BinaryFormatter();
+				bin.Serialize(stream, list);
+				stream.Close();
+			}
+			else
+			{
+				Stream stream = File.Open(path, FileMode.Open);
+				BinaryFormatter bin = new BinaryFormatter();
+				list = (List<int>)bin.Deserialize(stream);
+				stream.Close();
+			}
+
+			return list;
+		}
+
+		internal static Dictionary<string, string> GetDirectoryPaths(
+			int sizeOfList)
+		{
+			DateTime now = DateTime.Now;
+			string today = now.ToString(
+				"yyyy-MM-dd_HH-mm",
+				new CultureInfo("en-GB"));
+			string root = Environment.GetFolderPath(
+				Environment.SpecialFolder.Personal) +
+				$@"\Algorithms-In-C-Sharp-Generated-Files";
+			string benchmarks =
+				$@"{root}\BenchmarkResults";
+			string lists =
+				$@"{root}\Lists";
+			Dictionary<string, string> paths = new Dictionary<string, string>
+			{
+				{
+					"root",
+					root
+				},
+				{
+					"benchmarks",
+					benchmarks
+				},
+				{
+					"bMarkListSize",
+					$@"{benchmarks}\{sizeOfList}\"
+				},
+				{
+					"bMarkDate",
+					$@"{benchmarks}\{sizeOfList}\{today}"
+				},
+				{
+					"randomResults",
+					$@"{benchmarks}\{sizeOfList}\{today}\1_RandomLists\"
+				},
+				{
+					"orderedResults",
+					$@"{benchmarks}\{sizeOfList}\{today}\2_OrderedLists\"
+				},
+				{
+					"reversedResults",
+					$@"{benchmarks}\{sizeOfList}\{today}\3_ReversedLists\"
+				},
+				{
+					"lists",
+					lists
+				},
+				{
+					"randomListFile",
+					$@"{lists}\{sizeOfList}_random.bin"
+				},
+				{
+					"orderedListFile",
+					$@"{lists}\{sizeOfList}_ordered.bin"
+				},
+				{
+					"reversedListFile",
+					$@"{lists}\{sizeOfList}_reversed.bin"
+				},
+			};
+
+			return paths;
+		}
+
 		internal static void GenerateDirectories(int sizeOfArray)
 		{
 			Dictionary<string, string> paths =
 				GetDirectoryPaths(sizeOfArray);
 
 			// Check if directories exist and if not create them.
-			if (!Directory.Exists(paths["top"]))
+			if (!Directory.Exists(paths["root"]))
 			{
-				Directory.CreateDirectory(paths["top"]);
+				Directory.CreateDirectory(paths["root"]);
 			}
 
-			if (!Directory.Exists(paths["random"]))
+			if (!Directory.Exists(paths["randomResults"]))
 			{
-				Directory.CreateDirectory(paths["random"]);
+				Directory.CreateDirectory(paths["randomResults"]);
 			}
 
-			if (!Directory.Exists(paths["ordered"]))
+			if (!Directory.Exists(paths["orderedResults"]))
 			{
-				Directory.CreateDirectory(paths["ordered"]);
+				Directory.CreateDirectory(paths["orderedResults"]);
 			}
 
-			if (!Directory.Exists(paths["reversed"]))
+			if (!Directory.Exists(paths["reversedResults"]))
 			{
-				Directory.CreateDirectory(paths["reversed"]);
+				Directory.CreateDirectory(paths["reversedResults"]);
 			}
 
-			if (!Directory.Exists(paths["randomArrays"]))
+			if (!Directory.Exists(paths["lists"]))
 			{
-				Directory.CreateDirectory(paths["randomArrays"]);
+				Directory.CreateDirectory(paths["lists"]);
 			}
 		}
 
-		/// <summary>
-		/// Creates a dictionary of strings representing directory and file
-		/// paths for a number of uses with reporting Benchmarks.
-		/// </summary>
-		/// <param name="sizeOfArray">integer of array size to generate paths
-		/// relevant to the benchmarks being run.</param>
-		/// <returns>A Dictonary of string key and string value.</returns>
-		internal static Dictionary<string, string> GetDirectoryPaths(int sizeOfArray)
+		internal static List<int> GetRandomListFromFile(int sizeOfList)
 		{
-			DateTime dateTimeNow = DateTime.Now;
-			string now = dateTimeNow.ToString(
-			"yyyy-MM-dd_HH-mm", CultureInfo.CurrentCulture);
-
 			Dictionary<string, string> paths =
-				new Dictionary<string, string>();
+				GetDirectoryPaths(sizeOfList);
 
-			paths.Add(
-				"fileStore",
-				@"C:\Users\Public\Algorithms-In-C-Sharp-Generated-Files\");
+			List<int> list;
 
-			paths.Add(
-				"top",
-				paths["fileStore"] + @"BenchmarkResults\" + sizeOfArray + @"\" + now);
+			string path = paths["randomListFile"];
 
-			paths.Add(
-				"random",
-				paths["top"] + @"\1_RandomArrays");
+			if (!File.Exists(path))
+			{
+				int min = sizeOfList - (3 * sizeOfList);
+				int max = 2 * sizeOfList;
 
-			paths.Add(
-				"ordered",
-				paths["top"] + @"\2_OrderedArrays");
+				list = new List<int>();
+				Random rand = new Random();
 
-			paths.Add(
-				"reversed",
-				paths["top"] + @"\3_ReversedArrays");
+				for (int i = 0; i < sizeOfList; i++)
+					list.Add(rand.Next(min, max));
 
-			paths.Add(
-				"randomArrays",
-				paths["fileStore"] + @"\RandomArrays");
+				Stream stream = File.Open(path, FileMode.Create);
+				BinaryFormatter bin = new BinaryFormatter();
+				bin.Serialize(stream, list);
+				stream.Close();
+			}
+			else
+			{
+				Stream stream = File.Open(path, FileMode.Open);
+				BinaryFormatter bin = new BinaryFormatter();
+				list = (List<int>)bin.Deserialize(stream);
+				stream.Close();
+			}
 
-			paths.Add(
-				"randomArrayFile",
-				paths["randomArrays"] + @"\" + sizeOfArray + ".txt");
-
-			return paths;
+			return list;
 		}
 
-		/// <summary>
-		/// Finds the files relating to a benchmark and moves them to a relevant
-		/// location.
-		/// </summary>
-		/// <param name="reportPath">The path of the BencharkRunner.</param>
-		/// <param name="destinationPath">The path of the destination
-		/// directory.</param>
-		internal static void MoveBenchmarkReports(string reportPath, string destinationPath)
+		internal static void MoveBenchmarkReports(
+			string reportPath, string destinationPath)
 		{
 			// Move resulting benchmark results to a new folder organised by
 			// array size and the date and time benchmark was run.

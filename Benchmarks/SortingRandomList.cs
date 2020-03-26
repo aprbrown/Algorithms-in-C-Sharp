@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------------
-// <copyright file="SortingBenchmarksRandomArray.cs" company="Andrew P R Brown">
+// <copyright file="SortingRandomList.cs" company="Andrew P R Brown">
 // Copyright (c) Andrew P R Brown. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full
 // license information.
@@ -8,34 +8,24 @@
 
 namespace Benchmarks
 {
-	using Algorithms.Helpers;
+	using System.Collections.Generic;
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
 	using BenchmarkDotNet.Order;
 
-	/// <summary>
-	/// A suite of benchmarks to test a variety of sorting algorithms against a
-	/// randomly ordered array.
-	/// </summary>
 	[MemoryDiagnoser]
 	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 	[RankColumn]
-	public class SortingBenchmarksRandomArray
+	public class SortingRandomList
 	{
-		/// <summary>
-		/// Integer array for algorithms to be benchmarked against.
-		/// </summary>
-		private int[] randomArray;
+		private readonly int sizeOfList = Program.SizeOfList;
+		private List<int> randomList;
 
-		/// <summary>
-		/// Method to be called before running each benchmark. Generating a
-		/// fresh array to run the benchmark against.
-		/// </summary>
 		[GlobalSetup]
 		public void GlobalSetup()
 		{
-			int sizeOfArray = Program.SizeOfArray;
-			this.randomArray = BenchmarkUtils.TestArray(sizeOfArray);
+			this.randomList =
+				BenchmarkUtils.GetRandomListFromFile(this.sizeOfList);
 		}
 
 		// ** Random Array Benchmarks ******************************************
@@ -46,10 +36,9 @@ namespace Benchmarks
 		/// Benchmark the Insertion Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void InsertionSortRandom()
+		public void InsertionSort()
 		{
-			int[] insertionSortRandom =
-				ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> insertionSortRandom = new List<int>(this.randomList);
 			insertionSortRandom.InsertionSort();
 		}
 
@@ -57,10 +46,9 @@ namespace Benchmarks
 		/// Benchmark the Tree Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void TreeSortRandom()
+		public void TreeSort()
 		{
-			int[] treeSortRandom =
-				ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> treeSortRandom = new List<int>(this.randomList);
 			treeSortRandom.TreeSort();
 		}
 
@@ -70,10 +58,9 @@ namespace Benchmarks
 		/// Benchmark the Selection Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void SelectionSortRandom()
+		public void SelectionSort()
 		{
-			int[] selectionSortRandom =
-				ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> selectionSortRandom = new List<int>(this.randomList);
 			selectionSortRandom.SelectionSort();
 		}
 
@@ -81,9 +68,9 @@ namespace Benchmarks
 		/// Benchmark the Heap Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void HeapSortRandom()
+		public void HeapSort()
 		{
-			int[] heapSortRandom = ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> heapSortRandom = new List<int>(this.randomList);
 			heapSortRandom.HeapSort();
 		}
 
@@ -93,9 +80,9 @@ namespace Benchmarks
 		/// Benchmark the Merge Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void MergeSortRandom()
+		public void MergeSort()
 		{
-			int[] mergeSortRandom = ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> mergeSortRandom = new List<int>(this.randomList);
 			mergeSortRandom.MergeSort();
 		}
 
@@ -105,9 +92,9 @@ namespace Benchmarks
 		/// Benchmark the Quick Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void QuickSortRandom()
+		public void QuickSort()
 		{
-			int[] quickSortRandom = ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> quickSortRandom = new List<int>(this.randomList);
 			quickSortRandom.QuickSort();
 		}
 
@@ -116,11 +103,18 @@ namespace Benchmarks
 		/// <summary>
 		/// Benchmark the Bubble Sort Algorithm.
 		/// </summary>
-		[Benchmark(Baseline = true)]
-		public void BubbleSortRandom()
+		[Benchmark]
+		public void BubbleSort()
 		{
-			int[] bubbleSortRandom = ArrayUtils.CopyFullArray(this.randomArray);
+			List<int> bubbleSortRandom = new List<int>(this.randomList);
 			bubbleSortRandom.BubbleSort();
+		}
+
+		[GlobalCleanup]
+		public void GlobalCleanup()
+		{
+			this.randomList =
+				BenchmarkUtils.GetRandomListFromFile(this.sizeOfList);
 		}
 	}
 }

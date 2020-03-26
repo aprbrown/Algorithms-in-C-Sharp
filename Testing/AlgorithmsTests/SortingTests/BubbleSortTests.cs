@@ -8,18 +8,18 @@
 
 namespace Testing.AlgorithmsTests.SortingTests
 {
-	using System;
-	using Algorithms.Helpers;
+	using System.Collections.Generic;
 	using Algorithms.Sorting;
 	using Xunit;
 	using Xunit.Abstractions;
 
 	/// <summary>
-	/// Suite of tests for the BubbleSorter class.
+	/// Tests for BubbleSort.
 	/// </summary>
 	public class BubbleSortTests
 	{
 		private readonly ITestOutputHelper output;
+		private readonly SortingTests sT = SortingTests.Instance;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BubbleSortTests"/>
@@ -36,21 +36,45 @@ namespace Testing.AlgorithmsTests.SortingTests
 		/// Bubble Sort.
 		/// </summary>
 		[Fact]
-		public void BubbleSortAnArrayOfTwentyFiveRandomIntegers()
+		public void BubbleSortWillOrderAListOf25ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomTwentyFiveArray();
-			int[] sorted = SortingTestHelpers.GetSortedTwentyFiveArray();
+			IList<int> random = this.sT.GetRandom25();
+			IList<int> sorted = this.sT.GetOrdered25();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random.BubbleSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
+
+			Assert.Equal(sorted, random);
+		}
+
+		/// <summary>
+		/// Test that an array of 25 Random integers is correctly sorted in
+		/// reverse order with Bubble Sort when reversed equals true.
+		/// </summary>
+		[Fact]
+		public void BubbleSortWithReverseTrueWillOrderAListOf25ElementsFromHighestToLowest()
+		{
+			IList<int> random = this.sT.GetRandom25();
+			IList<int> sorted = this.sT.GetReversed25();
+
+			this.output.WriteLine(
+				"Random Before Sort:\n {0}", random.PrintList());
+
+			this.output.WriteLine(
+				"Sorted Array:\n {0}", sorted.PrintList());
+
+			random.BubbleSort(true);
+
+			this.output.WriteLine(
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
@@ -60,21 +84,45 @@ namespace Testing.AlgorithmsTests.SortingTests
 		/// Bubble Sort.
 		/// </summary>
 		[Fact]
-		public void BubbleSortAnArrayOfFiftyRandomIntegers()
+		public void BubbleSortWillOrderAListOf50ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomFiftyArray();
-			int[] sorted = SortingTestHelpers.GetSortedFiftyArray();
+			IList<int> random = this.sT.GetRandom50();
+			IList<int> sorted = this.sT.GetOrdered50();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random.BubbleSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
+
+			Assert.Equal(sorted, random);
+		}
+
+		/// <summary>
+		/// Test that an array of 50 Random integers is correctly sorted in
+		/// reverse order with Bubble Sort when reversed equals true.
+		/// </summary>
+		[Fact]
+		public void BubbleSortWithReverseTrueWillOrderAListOf50ElementsFromHighestToLowest()
+		{
+			IList<int> random = this.sT.GetRandom50();
+			IList<int> sorted = this.sT.GetReversed50();
+
+			this.output.WriteLine(
+				"Random Before Sort:\n {0}", random.PrintList());
+
+			this.output.WriteLine(
+				"Sorted Array:\n {0}", sorted.PrintList());
+
+			random.BubbleSort(true);
+
+			this.output.WriteLine(
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
@@ -84,21 +132,45 @@ namespace Testing.AlgorithmsTests.SortingTests
 		/// Bubble Sort.
 		/// </summary>
 		[Fact]
-		public void BubbleSortAnArrayOfOneHundredRandomIntegers()
+		public void BubbleSortWillOrderAListOf100ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomHundredArray();
-			int[] sorted = SortingTestHelpers.GetSortedHundredArray();
+			IList<int> random = this.sT.GetRandom100();
+			IList<int> sorted = this.sT.GetOrdered100();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random.BubbleSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
+
+			Assert.Equal(sorted, random);
+		}
+
+		/// <summary>
+		/// Test that an array of 100 Random integers is correctly sorted in
+		/// reverse order with Bubble Sort when reversed equals true.
+		/// </summary>
+		[Fact]
+		public void BubbleSortWithReverseTrueWillOrderAListOf100ElementsFromHighestToLowest()
+		{
+			IList<int> random = this.sT.GetRandom100();
+			IList<int> sorted = this.sT.GetReversed100();
+
+			this.output.WriteLine(
+				"Random Before Sort:\n {0}", random.PrintList());
+
+			this.output.WriteLine(
+				"Sorted Array:\n {0}", sorted.PrintList());
+
+			random.BubbleSort(true);
+
+			this.output.WriteLine(
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
@@ -109,9 +181,9 @@ namespace Testing.AlgorithmsTests.SortingTests
 		[Fact]
 		public void CallingBubbleSortOnANullReturnsNull()
 		{
-			int[] nullArray = null;
-			nullArray.BubbleSort();
-			Assert.Null(nullArray);
+			IList<int> nullList = null;
+			nullList.BubbleSort();
+			Assert.Null(nullList);
 		}
 
 		/// <summary>
@@ -119,9 +191,9 @@ namespace Testing.AlgorithmsTests.SortingTests
 		/// array.
 		/// </summary>
 		[Fact]
-		public void CallingBubbleSortOnAnEmptyArrayReturnsEmptyArray()
+		public void CallingBubbleSortOnAnEmptyListRemainsEmpty()
 		{
-			int[] empty = Array.Empty<int>();
+			IList<int> empty = new List<int>();
 			empty.BubbleSort();
 			Assert.Empty(empty);
 		}

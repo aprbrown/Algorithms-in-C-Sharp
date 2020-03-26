@@ -8,68 +8,89 @@
 
 namespace Algorithms.Sorting
 {
+	using System;
+	using System.Collections.Generic;
 	using Algorithms.Helpers;
 
 	/// <summary>
-	/// Implementation of the Heap Sort Algorithm, organizing an array into a
-	/// heap, then dividing the array into a sorted and unsorted section. After
-	/// a new element is added to the sorted section, the unsorted section is
-	/// reorganized into a heap and then a new element is added to the sorted
-	/// section until the entire array is sorted.
+	/// Implementation of the Heap Sort algorithm. Depending on whether the user
+	/// requires the List to be sorted from low to high or high to low, two
+	/// different strategies are implemented both creating heaps. Low to High
+	/// creates max heaps where parents are larger than their children, while
+	/// High to Low created min heaps where parents are lower than their
+	/// children. The first and last elements are then swapped resulting in the
+	/// final item being sorted. The next element to be swapped is then sifted
+	/// up or down (depending on the order of final sort) and the process
+	/// repeats until complete.
 	/// </summary>
 	public static class HeapSorter
 	{
 		/// <summary>
-		/// Public method to be called on an array ordering it from lowest to
-		/// highest using the HeapSort algorithm.
+		/// Public method to invoke Heap Sort on a list to order it from
+		/// lowest to highest or highest to lowest.
 		/// </summary>
-		/// <param name="array">An integer array to be sorted.</param>
-		public static void HeapSort(this int[] array)
+		/// <typeparam name="T">Type of element to be sorted.</typeparam>
+		/// <param name="list">List to be sorted.</param>
+		/// <param name="reversed">Whether list should be sorted low to high
+		/// (false) or high to low (true).</param>
+		public static void HeapSort<T>(
+			this IList<T> list, bool reversed = false)
+			where T : IComparable<T>
 		{
-			if (array == null || array.Length < 2)
+			if (list == null || list.Count < 2) return;
+
+			if (reversed)
 			{
-				return;
+				MinHeapify(list, list.Count - 1);
+
+				int end = list.Count - 1;
+				while (end > 0)
+				{
+					list.Swap(end, 0);
+					end--;
+					SiftUp(list, 0, end);
+				}
 			}
-
-			MaxHeapify(array, array.Length);
-
-			int end = array.Length - 1;
-			while (end > 0)
+			else
 			{
-				array.Swap(end, 0);
-				end--;
-				SiftDown(array, 0, end);
+				MaxHeapify(list, list.Count - 1);
+
+				int end = list.Count - 1;
+				while (end > 0)
+				{
+					list.Swap(end, 0);
+					end--;
+					SiftDown(list, 0, end);
+				}
 			}
 		}
 
-		/// <summary>
-		/// Reorders an incoming array in such a way that when visualized as
-		/// a binary tree the max value is the top node and no child is larger
-		/// than its parent.
-		/// </summary>
-		/// <param name="array">The integer array to be formed as a
-		/// heap.</param>
-		/// <param name="length">The max value in the array to be considered for
-		/// the heap.</param>
-		private static void MaxHeapify(int[] array, int length)
+		private static void MaxHeapify<T>(IList<T> list, int lastIndex)
+			where T : IComparable<T>
 		{
-			int start = ParentIndex(length - 1);
+			int start = ParentIndex(lastIndex);
 
 			while (start >= 0)
 			{
-				SiftDown(array, start, length - 1);
+				SiftDown(list, start, lastIndex);
 				start--;
 			}
 		}
 
-		/// <summary>
-		/// Repairs the incoming heap whose root element is located at the index
-		/// 'start' and final child element located at index 'end'.
-		/// </summary>
-		/// <param name="array">A heap in the form of an integer array.</param>
-		/// <param name="start">The index of the root element.</param>
-		/// <param name="end">Index of the final element in this branch.</param>
-		private static void SiftDown(int[] array, int start, int end)
+		private static void MinHeapify<T>(IList<T> list, int lastIndex)
+			where T : IComparable<T>
+		{
+			int start = ParentIndex(lastIndex);
+
+			while (start >= 0)
+			{
+				SiftUp(list, start, lastIndex);
+				start--;
+			}
+		}
+
+		private static void SiftDown<T>(IList<T> list, int start, int end)
+			where T : IComparable<T>
 		{
 			int root = start;
 
@@ -78,15 +99,12 @@ namespace Algorithms.Sorting
 				int child = LeftChildIndex(root);
 				int swap = root;
 
-				if (array[swap] < array[child])
-				{
+				if (list[swap].CompareTo(list[child]) < 0)
 					swap = child;
-				}
 
-				if (child + 1 <= end && array[swap] < array[child + 1])
-				{
+				if (child + 1 <= end &&
+					list[swap].CompareTo(list[child + 1]) < 0)
 					swap = child + 1;
-				}
 
 				if (swap == root)
 				{
@@ -94,45 +112,49 @@ namespace Algorithms.Sorting
 				}
 				else
 				{
-					array.Swap(root, swap);
+					list.Swap(root, swap);
 					root = swap;
 				}
 			}
 		}
 
-		/// <summary>
-		/// Given an index, calculate the index of its parent node.
-		/// </summary>
-		/// <param name="index">Index from which to determine a parent
-		/// node.</param>
-		/// <returns>Index of Parent node.</returns>
+		private static void SiftUp<T>(IList<T> list, int start, int end)
+			where T : IComparable<T>
+		{
+			int root = start;
+
+			while (LeftChildIndex(root) <= end)
+			{
+				int child = LeftChildIndex(root);
+				int swap = root;
+
+				if (list[swap].CompareTo(list[child]) > 0)
+					swap = child;
+
+				if (child + 1 <= end &&
+					list[swap].CompareTo(list[child + 1]) > 0)
+					swap = child + 1;
+
+				if (swap == root)
+				{
+					return;
+				}
+				else
+				{
+					list.Swap(root, swap);
+					root = swap;
+				}
+			}
+		}
+
 		private static int ParentIndex(int index)
 		{
 			return (index - 1) / 2;
 		}
 
-		/// <summary>
-		/// Given an index, calculate the index of child element on the left
-		/// hand side.
-		/// </summary>
-		/// <param name="index">Index from which to determine left child
-		/// node.</param>
-		/// <returns>Index of left child node.</returns>
 		private static int LeftChildIndex(int index)
 		{
 			return (2 * index) + 1;
-		}
-
-		/// <summary>
-		/// Given an index, calculate the index of child element on the right
-		/// hand side.
-		/// </summary>
-		/// <param name="index">Index from which to determine right child
-		/// node.</param>
-		/// <returns>Index of right child node.</returns>
-		private static int RightChildIndex(int index)
-		{
-			return (2 * index) + 2;
 		}
 	}
 }

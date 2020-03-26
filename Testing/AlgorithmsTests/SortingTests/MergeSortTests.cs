@@ -8,120 +8,93 @@
 
 namespace Testing.AlgorithmsTests.SortingTests
 {
-	using System;
-	using Algorithms.Helpers;
+	using System.Collections.Generic;
 	using Algorithms.Sorting;
 	using Xunit;
 	using Xunit.Abstractions;
 
-	/// <summary>
-	/// Suite of tests for the MergeSorter class.
-	/// </summary>
 	public class MergeSortTests
 	{
 		private readonly ITestOutputHelper output;
+		private readonly SortingTests sT = SortingTests.Instance;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MergeSortTests"/>
-		/// class.
-		/// </summary>
-		/// <param name="output">Instance of ITestOutputHelper.</param>
 		public MergeSortTests(ITestOutputHelper output)
 		{
 			this.output = output;
 		}
 
-		/// <summary>
-		/// Test that an array of 25 Random integers is correctly sorted with
-		/// Bubble Sort.
-		/// </summary>
 		[Fact]
-		public void MergeSortAnArrayOfTwentyFiveRandomIntegers()
+		public void MergeSortWillOrderAListOf25ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomTwentyFiveArray();
-			int[] sorted = SortingTestHelpers.GetSortedTwentyFiveArray();
+			IList<int> random = this.sT.GetRandom25();
+			IList<int> sorted = this.sT.GetOrdered25();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random = random.MergeSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
 
-		/// <summary>
-		/// Test that an array of 50 Random integers is correctly sorted with
-		/// Bubble Sort.
-		/// </summary>
 		[Fact]
-		public void MergeSortAnArrayOfFiftyRandomIntegers()
+		public void MergeSortWillOrderAListOf50ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomFiftyArray();
-			int[] sorted = SortingTestHelpers.GetSortedFiftyArray();
+			IList<int> random = this.sT.GetRandom50();
+			IList<int> sorted = this.sT.GetOrdered50();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random = random.MergeSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
 
-		/// <summary>
-		/// Test that an array of 100 Random integers is correctly sorted with
-		/// Bubble Sort.
-		/// </summary>
 		[Fact]
-		public void MergeSortAnArrayOfOneHundredRandomIntegers()
+		public void MergeSortWillOrderAListOf100ElementsFromLowestToHighest()
 		{
-			int[] random = SortingTestHelpers.GetRandomHundredArray();
-			int[] sorted = SortingTestHelpers.GetSortedHundredArray();
+			IList<int> random = this.sT.GetRandom100();
+			IList<int> sorted = this.sT.GetOrdered100();
 
 			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintArray());
+				"Random Before Sort:\n {0}", random.PrintList());
 
 			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintArray());
+				"Sorted Array:\n {0}", sorted.PrintList());
 
 			random = random.MergeSort();
 
 			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintArray());
+				"Random After Sort:\n {0}", random.PrintList());
 
 			Assert.Equal(sorted, random);
 		}
 
-		/// <summary>
-		/// Test that calling MergeSort on null remains a null.
-		/// </summary>
 		[Fact]
 		public void CallingMergeSortOnANullReturnsNull()
 		{
-			int[] nullArray = null;
-			nullArray = nullArray.MergeSort();
-			Assert.Null(nullArray);
+			IList<int> nullList = null;
+			nullList = nullList.MergeSort();
+			Assert.Null(nullList);
 		}
 
-		/// <summary>
-		/// Test that calling MergeSort on an Empty array results in an empty
-		/// array.
-		/// </summary>
 		[Fact]
 		public void CallingMergeSortOnAnEmptyArrayReturnsEmptyArray()
 		{
-			int[] empty = Array.Empty<int>();
+			IList<int> empty = new List<int>();
 			empty = empty.MergeSort();
 			Assert.Empty(empty);
 		}

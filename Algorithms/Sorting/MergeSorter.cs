@@ -1,97 +1,52 @@
-﻿// -----------------------------------------------------------------------------
-// <copyright file="MergeSorter.cs" company="Andrew P R Brown">
-// Copyright (c) Andrew P R Brown. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full
-// license information.
-// </copyright>
-// -----------------------------------------------------------------------------
-
-namespace Algorithms.Sorting
+﻿namespace Algorithms.Sorting
 {
 	using System;
+	using System.Collections.Generic;
 
-	/// <summary>
-	/// Implementation of the Merge Sort Algorithm. The incoming array is
-	/// divided into n sub-arrays where n equals the number of elements in the
-	/// array. The sub-arrays are then merged into new ordered sub-arrays. This
-	/// continues until a final sorted array containing all elements is created.
-	/// </summary>
 	public static class MergeSorter
 	{
-		/// <summary>
-		/// Public method to be called on an array ordering it from lowest to
-		/// highest using the Merge Sort algorithm.
-		/// </summary>
-		/// <param name="array">An integer array to be sorted.</param>
-		/// <returns>A sorted integer array.</returns>
-		public static int[] MergeSort(this int[] array)
+		public static IList<T> MergeSort<T>(this IList<T> list)
+			where T : IComparable<T>
 		{
-			if (array == null || array.Length < 2)
-			{
-				return array;
-			}
+			if (list == null || list.Count < 2) return list;
 
-			int[] left, right, sortedArray;
-			int midpoint = array.Length / 2;
-			left = new int[midpoint];
-			if (array.Length % 2 == 0)
-			{
-				right = new int[midpoint];
-			}
-			else
-			{
-				right = new int[midpoint + 1];
-			}
+			IList<T> left, right, sortedArray = new List<T>();
+			List<T> unsortedList = new List<T>(list);
 
-			Array.Copy(array, 0, left, 0, midpoint);
-			Array.Copy(array, midpoint, right, 0, array.Length - midpoint);
+			int midpoint = list.Count / 2;
+
+			left = unsortedList.GetRange(0, midpoint);
+			right = unsortedList.GetRange(
+				midpoint, unsortedList.Count - midpoint);
+
 			left = MergeSort(left);
 			right = MergeSort(right);
 			sortedArray = Merge(left, right);
 			return sortedArray;
 		}
 
-		/// <summary>
-		/// Merges two incoming arrays into a new ordered array.
-		/// </summary>
-		/// <param name="left">Left side sub-array.</param>
-		/// <param name="right">Right side sub-array.</param>
-		/// <returns>A sorted array containing all elements of both left and
-		/// right arrays.</returns>
-		private static int[] Merge(int[] left, int[] right)
+		private static IList<T> Merge<T>(IList<T> left, IList<T> right)
+			where T : IComparable<T>
 		{
-			int combinedSize = left.Length + right.Length;
-			int[] result = new int[combinedSize];
-			int leftIndex = 0, rightIndex = 0, resultIndex = 0;
-			while (leftIndex < left.Length && rightIndex < right.Length)
+			IList<T> result = new List<T>();
+			Queue<T> leftQueue = new Queue<T>(left);
+			Queue<T> rightQueue = new Queue<T>(right);
+
+			while (leftQueue.Count > 0 && rightQueue.Count > 0)
 			{
-				if (left[leftIndex] <= right[rightIndex])
+				if (leftQueue.Peek().CompareTo(rightQueue.Peek()) <= 0)
 				{
-					result[resultIndex] = left[leftIndex];
-					resultIndex++;
-					leftIndex++;
+					result.Add(leftQueue.Dequeue());
 				}
 				else
 				{
-					result[resultIndex] = right[rightIndex];
-					resultIndex++;
-					rightIndex++;
+					result.Add(rightQueue.Dequeue());
 				}
 			}
 
-			while (leftIndex < left.Length)
-			{
-				result[resultIndex] = left[leftIndex];
-				resultIndex++;
-				leftIndex++;
-			}
+			while (leftQueue.Count > 0) result.Add(leftQueue.Dequeue());
 
-			while (rightIndex < right.Length)
-			{
-				result[resultIndex] = right[rightIndex];
-				resultIndex++;
-				rightIndex++;
-			}
+			while (rightQueue.Count > 0) result.Add(rightQueue.Dequeue());
 
 			return result;
 		}

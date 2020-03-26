@@ -1,4 +1,4 @@
-// -----------------------------------------------------------------------------
+﻿// -----------------------------------------------------------------------------
 // <copyright file="Program.cs" company="Andrew P R Brown">
 // Copyright (c) Andrew P R Brown. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full
@@ -13,14 +13,14 @@ namespace Benchmarks
 	using BenchmarkDotNet.Running;
 
 	/// <summary>
-	/// Main class of Benchmarks program.
+	/// Main program for benchmarks to be run.
 	/// </summary>
 	public static class Program
 	{
 		/// <summary>
-		/// The size of the array for benchmarks to run against.
+		/// Gets the size of the list which benchmarks will be run against.
 		/// </summary>
-		internal const int SizeOfArray = 250_000;
+		internal static int SizeOfList { get; } = 250_000;
 
 		/// <summary>
 		/// Main program to run benchmarks against the implemented algorithms
@@ -30,40 +30,40 @@ namespace Benchmarks
 		/// </summary>
 		public static void Main()
 		{
-			BenchmarkUtils.GenerateDirectories(SizeOfArray);
+			BenchmarkUtils.GenerateDirectories(SizeOfList);
 			Dictionary<string, string> directoryPaths =
-				BenchmarkUtils.GetDirectoryPaths(SizeOfArray);
+				BenchmarkUtils.GetDirectoryPaths(SizeOfList);
 
 			// Start benchmark runner for Random Arrays.
-			var randomArraySummary =
-				BenchmarkRunner.Run<SortingBenchmarksRandomArray>();
-			Console.WriteLine(randomArraySummary);
+			var randomListSummary =
+				BenchmarkRunner.Run<SortingRandomList>();
+			Console.WriteLine(randomListSummary);
 
-			string randomSourcePath = randomArraySummary.ResultsDirectoryPath;
+			string randomSourcePath = randomListSummary.ResultsDirectoryPath;
 			BenchmarkUtils.MoveBenchmarkReports(
 				randomSourcePath,
-				directoryPaths["random"]);
+				directoryPaths["randomResults"]);
 
 			// Start benchmark runner for Ordered Arrays.
-			var orderedArraySummary =
-				BenchmarkRunner.Run<SortingBenchmarksOrderedArray>();
-			Console.WriteLine(orderedArraySummary);
+			var orderedListSummary =
+				BenchmarkRunner.Run<SortingOrderedList>();
+			Console.WriteLine(orderedListSummary);
 
-			string orderedSourcePath = orderedArraySummary.ResultsDirectoryPath;
+			string orderedSourcePath = orderedListSummary.ResultsDirectoryPath;
 			BenchmarkUtils.MoveBenchmarkReports(
 				orderedSourcePath,
-				directoryPaths["ordered"]);
+				directoryPaths["orderedResults"]);
 
 			// Start benchmark runner for Reversed Arrays.
-			var reversedArraySummary =
-				BenchmarkRunner.Run<SortingBenchmarksReversedArray>();
-			Console.WriteLine(reversedArraySummary);
+			var reversedListSummary =
+				BenchmarkRunner.Run<SortingReversedList>();
+			Console.WriteLine(reversedListSummary);
 
 			string reversedSourcePath =
-				reversedArraySummary.ResultsDirectoryPath;
+				reversedListSummary.ResultsDirectoryPath;
 			BenchmarkUtils.MoveBenchmarkReports(
 				reversedSourcePath,
-				directoryPaths["reversed"]);
+				directoryPaths["reversedResults"]);
 		}
 	}
 }
