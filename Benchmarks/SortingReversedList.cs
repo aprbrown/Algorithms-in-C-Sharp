@@ -9,50 +9,60 @@
 namespace Benchmarks
 {
 	using System.Collections.Generic;
-	using Algorithms.Helpers;
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
 	using BenchmarkDotNet.Order;
+	using Benchmarks.Helpers;
 
 	[MemoryDiagnoser]
 	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 	[RankColumn]
 	public class SortingReversedList
 	{
-		private readonly int sizeOfList = Program.SizeOfList;
-		private List<int> reversedList;
+		private static Benchmarks instance;
+
+		private List<int> insertionSort;
+		private List<int> treeSort;
+		private List<int> selectionSort;
+		private List<int> heapSort;
+		private List<int> mergeSort;
+		private List<int> quickSort;
+		private List<int> bubbleSort;
 
 		[GlobalSetup]
 		public void GlobalSetup()
 		{
-			this.reversedList =
-				BenchmarkUtils.GetReverseOrderedListFromFile(this.sizeOfList);
+			instance = Benchmarks.Instance;
+		}
+
+		[IterationSetup]
+		public void IterationSetup()
+		{
+			this.insertionSort = instance.GetReversedList();
+			this.treeSort = instance.GetReversedList();
+			this.selectionSort = instance.GetReversedList();
+			this.heapSort = instance.GetReversedList();
+			this.mergeSort = instance.GetReversedList();
+			this.quickSort = instance.GetReversedList();
+			this.bubbleSort = instance.GetReversedList();
 		}
 
 		// ** Reverse Ordered Array Benchmarks *********************************
 
-		// -- Insertion Methods ------------------------------------------------
+			// -- Insertion Methods ------------------------------------------------
 
-		/// <summary>
-		/// Benchmark the Insertion Sort Algorithm and assign its performance as
-		/// the baseline others will be compared to.
-		/// </summary>
+			/// <summary>
+			/// Benchmark the Insertion Sort Algorithm and assign its performance as
+			/// the baseline others will be compared to.
+			/// </summary>
 		[Benchmark]
-		public void InsertionSort()
-		{
-			List<int> insertionSortReverse = new List<int>(this.reversedList);
-			insertionSortReverse.InsertionSort();
-		}
+		public void InsertionSort() => this.insertionSort.InsertionSort();
 
 		/// <summary>
 		/// Benchmark the Tree Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void TreeSort()
-		{
-			List<int> treeSortReverse = new List<int>(this.reversedList);
-			treeSortReverse.TreeSort();
-		}
+		public void TreeSort() => this.treeSort.TreeSort();
 
 		// -- Selection Methods ------------------------------------------------
 
@@ -60,21 +70,13 @@ namespace Benchmarks
 		/// Benchmark the Selection Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void SelectionSort()
-		{
-			List<int> selectionSortReverse = new List<int>(this.reversedList);
-			selectionSortReverse.SelectionSort();
-		}
+		public void SelectionSort() => this.selectionSort.SelectionSort();
 
 		/// <summary>
 		/// Benchmark the Heap Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void HeapSort()
-		{
-			List<int> heapSortReverse = new List<int>(this.reversedList);
-			heapSortReverse.HeapSort();
-		}
+		public void HeapSort() => this.heapSort.HeapSort();
 
 		// -- Merging Methods --------------------------------------------------
 
@@ -82,11 +84,7 @@ namespace Benchmarks
 		/// Benchmark the Merge Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void MergeSort()
-		{
-			List<int> mergeSortReverse = new List<int>(this.reversedList);
-			mergeSortReverse.MergeSort();
-		}
+		public void MergeSort() => this.mergeSort.MergeSort();
 
 		// -- Partitioning Methods ---------------------------------------------
 
@@ -94,11 +92,7 @@ namespace Benchmarks
 		/// Benchmark the Quick Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void QuickSort()
-		{
-			List<int> quickSortReverse = new List<int>(this.reversedList);
-			quickSortReverse.QuickSort();
-		}
+		public void QuickSort() => this.quickSort.QuickSort();
 
 		// -- Exchanging Methods -----------------------------------------------
 
@@ -106,17 +100,6 @@ namespace Benchmarks
 		/// Benchmark the Bubble Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void BubbleSort()
-		{
-			List<int> bubbleSortReverse = new List<int>(this.reversedList);
-			bubbleSortReverse.BubbleSort();
-		}
-
-		[GlobalCleanup]
-		public void GlobalCleanup()
-		{
-			this.reversedList =
-				BenchmarkUtils.GetReverseOrderedListFromFile(this.sizeOfList);
-		}
+		public void BubbleSort() => this.bubbleSort.BubbleSort();
 	}
 }

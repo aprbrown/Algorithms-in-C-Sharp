@@ -1,12 +1,18 @@
 # Readme
 
-The purpose of this project is to allow me to explore, understand and implement some of the famous sorting algorithms in C#. By implementing the algorithms myself, I aim to better understand the benefits and drawbacks of different solutions whilst also improving my knowledge of the C# language. Development follows a test-driven approach and each algorithm will be benchmarked against one another to check performance.
+The purpose of this project is to allow me to explore, understand and implement
+some of the famous sorting algorithms in C#. By implementing the algorithms
+myself, I aim to better understand the benefits and drawbacks of different
+solutions whilst also improving my knowledge of the C# language. Development
+follows a test-driven approach and each algorithm will be benchmarked against
+one another to check performance.
 
 ## Implemented Algorithms
 
 ### Insertion Method
 
 - Insertion Sort
+- Tree Sort
 
 ### Selection Method
 
@@ -35,14 +41,15 @@ The purpose of this project is to allow me to explore, understand and implement 
 
 ## Benchmarks
 
-Each algorithm is benchmarked against an array of integers of a given length.
-The first benchmark runs the algorithm against a randomised set of digits
-between one and the overall size of the array e.g. an array of size 100 would
-have numbers between 1 and 100.
+Each algorithm is benchmarked against list of integers of a given length.
 
-The second benchmark is against an already sorted array and the third is ran
-with an array in reverse order. These combinations can help highlight worst case
-performance in some cases.
+The first benchmark runs the algorithm against a randomised set of digits.
+
+The second benchmark is against an already sorted list.
+
+The third is ran with a list in reverse order.
+
+These combinations can help highlight worst case performance in some cases.
 
 Benchmarks are performed with the following configuration:
 

@@ -3,22 +3,32 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
+	using Algorithms.Helpers;
 
 	public static class TreeSorter
 	{
 		private static int index = 0;
 
-		public static void TreeSort<T>(this IList<T> List)
+		public static void TreeSort<T>(this IList<T> list)
 			where T : IComparable<T>
 		{
-			if (List == null || List.Count < 2) return;
+			if (list == null || list.Count < 2) return;
 
-			Node<T> treeRoot = new Node<T>() { Value = List[0] };
+			if (list[0].CompareTo(list[list.Count / 2]) > 0)
+				list.Swap(0, list.Count / 2);
 
-			for (int i = 1; i < List.Count; i++)
+			if (list[list.Count / 2].CompareTo(list[list.Count - 1]) > 0)
+				list.Swap(list.Count / 2, list.Count - 1);
+
+			if (list[0].CompareTo(list[list.Count / 2]) < 0)
+				list.Swap(0, list.Count / 2);
+
+			Node<T> treeRoot = new Node<T>() { Value = list[0] };
+
+			for (int i = 1; i < list.Count; i++)
 			{
 				var currentNode = treeRoot;
-				var newNode = new Node<T>() { Value = List[i] };
+				var newNode = new Node<T>() { Value = list[i] };
 
 				while (true)
 				{
@@ -47,7 +57,7 @@
 				}
 			}
 
-			TraverseAndAddToArray(treeRoot, List);
+			TraverseAndAddToArray(treeRoot, list);
 			index = 0;
 		}
 

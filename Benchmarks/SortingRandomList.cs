@@ -12,45 +12,56 @@ namespace Benchmarks
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
 	using BenchmarkDotNet.Order;
+	using Benchmarks.Helpers;
 
 	[MemoryDiagnoser]
 	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 	[RankColumn]
 	public class SortingRandomList
 	{
-		private readonly int sizeOfList = Program.SizeOfList;
-		private List<int> randomList;
+		private static Benchmarks instance;
+
+		private List<int> insertionSort;
+		private List<int> treeSort;
+		private List<int> selectionSort;
+		private List<int> heapSort;
+		private List<int> mergeSort;
+		private List<int> quickSort;
+		private List<int> bubbleSort;
 
 		[GlobalSetup]
 		public void GlobalSetup()
 		{
-			this.randomList =
-				BenchmarkUtils.GetRandomListFromFile(this.sizeOfList);
+			instance = Benchmarks.Instance;
+		}
+
+		[IterationSetup]
+		public void IterationSetup()
+		{
+			this.insertionSort = instance.GetRandomList();
+			this.treeSort = instance.GetRandomList();
+			this.selectionSort = instance.GetRandomList();
+			this.heapSort = instance.GetRandomList();
+			this.mergeSort = instance.GetRandomList();
+			this.quickSort = instance.GetRandomList();
+			this.bubbleSort = instance.GetRandomList();
 		}
 
 		// ** Random Array Benchmarks ******************************************
 
-		// -- Insertion Methods ------------------------------------------------
+			// -- Insertion Methods ------------------------------------------------
 
-		/// <summary>
-		/// Benchmark the Insertion Sort Algorithm.
-		/// </summary>
+			/// <summary>
+			/// Benchmark the Insertion Sort Algorithm.
+			/// </summary>
 		[Benchmark]
-		public void InsertionSort()
-		{
-			List<int> insertionSortRandom = new List<int>(this.randomList);
-			insertionSortRandom.InsertionSort();
-		}
+		public void InsertionSort() => this.insertionSort.InsertionSort();
 
 		/// <summary>
 		/// Benchmark the Tree Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void TreeSort()
-		{
-			List<int> treeSortRandom = new List<int>(this.randomList);
-			treeSortRandom.TreeSort();
-		}
+		public void TreeSort() => this.treeSort.TreeSort();
 
 		// -- Selection Methods ------------------------------------------------
 
@@ -58,21 +69,13 @@ namespace Benchmarks
 		/// Benchmark the Selection Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void SelectionSort()
-		{
-			List<int> selectionSortRandom = new List<int>(this.randomList);
-			selectionSortRandom.SelectionSort();
-		}
+		public void SelectionSort() => this.selectionSort.SelectionSort();
 
 		/// <summary>
 		/// Benchmark the Heap Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void HeapSort()
-		{
-			List<int> heapSortRandom = new List<int>(this.randomList);
-			heapSortRandom.HeapSort();
-		}
+		public void HeapSort() => this.heapSort.HeapSort();
 
 		// -- Merging Methods --------------------------------------------------
 
@@ -80,11 +83,7 @@ namespace Benchmarks
 		/// Benchmark the Merge Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void MergeSort()
-		{
-			List<int> mergeSortRandom = new List<int>(this.randomList);
-			mergeSortRandom.MergeSort();
-		}
+		public void MergeSort() => this.mergeSort.MergeSort();
 
 		// -- Partitioning Methods ---------------------------------------------
 
@@ -92,11 +91,7 @@ namespace Benchmarks
 		/// Benchmark the Quick Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void QuickSort()
-		{
-			List<int> quickSortRandom = new List<int>(this.randomList);
-			quickSortRandom.QuickSort();
-		}
+		public void QuickSort() => this.quickSort.QuickSort();
 
 		// -- Exchanging Methods -----------------------------------------------
 
@@ -104,17 +99,6 @@ namespace Benchmarks
 		/// Benchmark the Bubble Sort Algorithm.
 		/// </summary>
 		[Benchmark]
-		public void BubbleSort()
-		{
-			List<int> bubbleSortRandom = new List<int>(this.randomList);
-			bubbleSortRandom.BubbleSort();
-		}
-
-		[GlobalCleanup]
-		public void GlobalCleanup()
-		{
-			this.randomList =
-				BenchmarkUtils.GetRandomListFromFile(this.sizeOfList);
-		}
+		public void BubbleSort() => this.bubbleSort.BubbleSort();
 	}
 }

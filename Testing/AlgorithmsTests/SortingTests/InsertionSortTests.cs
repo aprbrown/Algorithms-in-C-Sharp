@@ -10,77 +10,66 @@ namespace Testing.AlgorithmsTests.SortingTests
 {
 	using System.Collections.Generic;
 	using Algorithms.Sorting;
+	using Testing.AlgorithmsTests.Helpers;
 	using Xunit;
 	using Xunit.Abstractions;
 
 	public class InsertionSortTests
 	{
+		private static readonly SortingTests Lists = SortingTests.Instance;
 		private readonly ITestOutputHelper output;
-		private readonly SortingTests sT = SortingTests.Instance;
 
 		public InsertionSortTests(ITestOutputHelper output)
 		{
 			this.output = output;
 		}
 
-		[Fact]
-		public void InsertionSortWillOrderAListOf25ElementsFromLowestToHighest()
+		public static IEnumerable<object[]> InsertionSortDataAscending =>
+			new List<object[]>
 		{
-			IList<int> random = this.sT.GetRandom25();
-			IList<int> sorted = this.sT.GetOrdered25();
+			new object[] { Lists.GetRandomList1(), Lists.GetOrderedList1() },
+			new object[] { Lists.GetRandomList2(), Lists.GetOrderedList2() },
+			new object[] { Lists.GetRandomList3(), Lists.GetOrderedList3() },
+		};
 
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
+		public static IEnumerable<object[]> InsertionSortDataDescending =>
+			new List<object[]>
+		{
+			new object[] { Lists.GetRandomList1(), Lists.GetReversedList1() },
+			new object[] { Lists.GetRandomList2(), Lists.GetReversedList2() },
+			new object[] { Lists.GetRandomList3(), Lists.GetReversedList3() },
+		};
 
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
+		[Theory]
+		[MemberData(nameof(InsertionSortDataAscending))]
+		public void InsertionSortWillSortAListInAscendingOrder(
+			List<int> random, List<int> ordered)
+		{
+			this.output.WriteLine("Random Before Sort:\n{0}", random.PrintList());
+
+			this.output.WriteLine("Ordered Array:\n{0}", ordered.PrintList());
 
 			random.InsertionSort();
 
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
+			this.output.WriteLine("Random After Sort:\n{0}", random.PrintList());
 
-			Assert.Equal(sorted, random);
+			Assert.Equal(random, ordered);
 		}
 
-		[Fact]
-		public void InsertionSortWillOrderAListOf50ElementsFromLowestToHighest()
+		[Theory]
+		[MemberData(nameof(InsertionSortDataDescending))]
+		public void InsertionSortWillSortAListInDescendingOrderWhenDescendingIsTrue(
+			List<int> random, List<int> reversed)
 		{
-			IList<int> random = this.sT.GetRandom50();
-			IList<int> sorted = this.sT.GetOrdered50();
+			this.output.WriteLine("Random Before Sort:\n{0}", random.PrintList());
 
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
+			this.output.WriteLine("Reversed Array:\n{0}", reversed.PrintList());
 
 			random.InsertionSort();
 
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
+			this.output.WriteLine("Random After Sort:\n{0}", random.PrintList());
 
-			Assert.Equal(sorted, random);
-		}
-
-		[Fact]
-		public void InsertionSortWillOrderAListOf100ElementsFromLowestToHighest()
-		{
-			IList<int> random = this.sT.GetRandom100();
-			IList<int> sorted = this.sT.GetOrdered100();
-
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
-
-			random.InsertionSort();
-
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
-
-			Assert.Equal(sorted, random);
+			Assert.Equal(random, reversed);
 		}
 
 		[Fact]

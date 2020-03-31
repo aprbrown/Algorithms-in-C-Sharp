@@ -10,157 +10,66 @@ namespace Testing.AlgorithmsTests.SortingTests
 {
 	using System.Collections.Generic;
 	using Algorithms.Sorting;
+	using Testing.AlgorithmsTests.Helpers;
 	using Xunit;
 	using Xunit.Abstractions;
 
 	public class HeapSortTests
 	{
+		private static readonly SortingTests Lists = SortingTests.Instance;
 		private readonly ITestOutputHelper output;
-		private readonly SortingTests sT = SortingTests.Instance;
 
 		public HeapSortTests(ITestOutputHelper output)
 		{
 			this.output = output;
 		}
 
-		[Fact]
-		public void HeapSortWillOrderAListOf25ElementsFromLowestToHighest()
+		public static IEnumerable<object[]> HeapSortDataAscending =>
+			new List<object[]>
 		{
-			IList<int> random = this.sT.GetRandom25();
-			IList<int> sorted = this.sT.GetOrdered25();
+			new object[] { Lists.GetRandomList1(), Lists.GetOrderedList1() },
+			new object[] { Lists.GetRandomList2(), Lists.GetOrderedList2() },
+			new object[] { Lists.GetRandomList3(), Lists.GetOrderedList3() },
+		};
 
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
+		public static IEnumerable<object[]> HeapSortDataDescending =>
+			new List<object[]>
+		{
+			new object[] { Lists.GetRandomList1(), Lists.GetReversedList1() },
+			new object[] { Lists.GetRandomList2(), Lists.GetReversedList2() },
+			new object[] { Lists.GetRandomList3(), Lists.GetReversedList3() },
+		};
 
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
+		[Theory]
+		[MemberData(nameof(HeapSortDataAscending))]
+		public void HeapSortWillSortAListInAscendingOrder(
+			List<int> random, List<int> ordered)
+		{
+			this.output.WriteLine("Random Before Sort:\n{0}", random.PrintList());
+
+			this.output.WriteLine("Ordered Array:\n{0}", ordered.PrintList());
 
 			random.HeapSort();
 
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
+			this.output.WriteLine("Random After Sort:\n{0}", random.PrintList());
 
-			Assert.Equal(sorted, random);
+			Assert.Equal(random, ordered);
 		}
 
-		/// <summary>
-		/// Test that an array of 25 Random integers is correctly sorted in
-		/// reverse order with Heap Sort when reversed equals true.
-		/// </summary>
-		[Fact]
-		public void HeapSortWithReverseTrueWillOrderAListOf25ElementsFromHighestToLowest()
+		[Theory]
+		[MemberData(nameof(HeapSortDataDescending))]
+		public void HeapSortWillSortAListInDescendingOrderWhenDescendingIsTrue(
+			List<int> random, List<int> reversed)
 		{
-			IList<int> random = this.sT.GetRandom25();
-			IList<int> sorted = this.sT.GetReversed25();
+			this.output.WriteLine("Random Before Sort:\n{0}", random.PrintList());
 
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
+			this.output.WriteLine("Reversed Array:\n{0}", reversed.PrintList());
 
 			random.HeapSort(true);
 
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
+			this.output.WriteLine("Random After Sort:\n{0}", random.PrintList());
 
-			Assert.Equal(sorted, random);
-		}
-
-		/// <summary>
-		/// Test that an array of 50 Random integers is correctly sorted with
-		/// Bubble Sort.
-		/// </summary>
-		[Fact]
-		public void HeapSortWillOrderAListOf50ElementsFromLowestToHighest()
-		{
-			IList<int> random = this.sT.GetRandom50();
-			IList<int> sorted = this.sT.GetOrdered50();
-
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
-
-			random.HeapSort();
-
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
-
-			Assert.Equal(sorted, random);
-		}
-
-		/// <summary>
-		/// Test that an array of 50 Random integers is correctly sorted in
-		/// reverse order with Heap Sort when reversed equals true.
-		/// </summary>
-		[Fact]
-		public void HeapSortWithReverseTrueWillOrderAListOf50ElementsFromHighestToLowest()
-		{
-			IList<int> random = this.sT.GetRandom50();
-			IList<int> sorted = this.sT.GetReversed50();
-
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
-
-			random.HeapSort(true);
-
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
-
-			Assert.Equal(sorted, random);
-		}
-
-		/// <summary>
-		/// Test that an array of 100 Random integers is correctly sorted with
-		/// Bubble Sort.
-		/// </summary>
-		[Fact]
-		public void HeapSortWillOrderAListOf100ElementsFromLowestToHighest()
-		{
-			IList<int> random = this.sT.GetRandom100();
-			IList<int> sorted = this.sT.GetOrdered100();
-
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
-
-			random.HeapSort();
-
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
-
-			Assert.Equal(sorted, random);
-		}
-
-		/// <summary>
-		/// Test that an array of 100 Random integers is correctly sorted in
-		/// reverse order with Heap Sort when reversed equals true.
-		/// </summary>
-		[Fact]
-		public void HeapSortWithReverseTrueWillOrderAListOf100ElementsFromHighestToLowest()
-		{
-			IList<int> random = this.sT.GetRandom100();
-			IList<int> sorted = this.sT.GetReversed100();
-
-			this.output.WriteLine(
-				"Random Before Sort:\n {0}", random.PrintList());
-
-			this.output.WriteLine(
-				"Sorted Array:\n {0}", sorted.PrintList());
-
-			random.HeapSort(true);
-
-			this.output.WriteLine(
-				"Random After Sort:\n {0}", random.PrintList());
-
-			Assert.Equal(sorted, random);
+			Assert.Equal(random, reversed);
 		}
 
 		/// <summary>

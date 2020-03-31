@@ -6,11 +6,11 @@
 // </copyright>
 // -----------------------------------------------------------------------------
 
-namespace Testing.AlgorithmsTests
+namespace Testing.AlgorithmsTests.Helpers
 {
 	using System.Collections.Generic;
 
-	internal static class SortingTestHelpers
+	public static class SortingTestHelpers
 	{
 		public static string PrintList<T>(this IList<T> listToPrint)
 		{

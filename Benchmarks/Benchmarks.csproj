@@ -45,5 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Algorithms\Algorithms.csproj" />
+    <ProjectReference Include="..\Testing\Testing.csproj" />
   </ItemGroup>
 </Project>

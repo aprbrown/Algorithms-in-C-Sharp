@@ -23,32 +23,37 @@ namespace Testing.AlgorithmsTests.SortingTests
 	/// </summary>
 	internal sealed class SortingTests : IDisposable
 	{
+		private const int SizeOfList1 = 25;
+		private const int SizeOfList2 = 50;
+		private const int SizeOfList3 = 100;
+
+		private static readonly int[] ListSizes =
+		{
+			SizeOfList1, SizeOfList2, SizeOfList3,
+		};
+
 		private static readonly object SyncLock = new object();
-		private static volatile SortingTests instance;
-		private readonly List<int> random25;
-		private readonly List<int> ordered25;
-		private readonly List<int> reversed25;
-		private readonly List<int> random50;
-		private readonly List<int> ordered50;
-		private readonly List<int> reversed50;
-		private readonly List<int> random100;
-		private readonly List<int> ordered100;
-		private readonly List<int> reversed100;
+		private static readonly Dictionary<string, string> Paths =
+			GetDirectoryPaths();
+
+		private static volatile SortingTests instance = null;
+
 		private bool disposed = false;
+
+		private List<int> randomList1;
+		private List<int> orderedList1;
+		private List<int> reversedList1;
+		private List<int> randomList2;
+		private List<int> orderedList2;
+		private List<int> reversedList2;
+		private List<int> randomList3;
+		private List<int> orderedList3;
+		private List<int> reversedList3;
 
 		private SortingTests()
 		{
-			this.random25 = this.GetListFromFile(25, ListStyles.Random);
-			this.ordered25 = this.GetListFromFile(25, ListStyles.Ordered);
-			this.reversed25 = this.GetListFromFile(25, ListStyles.Reversed);
-
-			this.random50 = this.GetListFromFile(50, ListStyles.Random);
-			this.ordered50 = this.GetListFromFile(50, ListStyles.Ordered);
-			this.reversed50 = this.GetListFromFile(50, ListStyles.Reversed);
-
-			this.random100 = this.GetListFromFile(100, ListStyles.Random);
-			this.ordered100 = this.GetListFromFile(100, ListStyles.Ordered);
-			this.reversed100 = this.GetListFromFile(100, ListStyles.Reversed);
+			this.GenerateDirectories();
+			this.PopulateLists();
 		}
 
 		/// <summary>
@@ -59,13 +64,6 @@ namespace Testing.AlgorithmsTests.SortingTests
 			this.Dispose(false);
 		}
 
-		private enum ListStyles
-		{
-			Random,
-			Ordered,
-			Reversed,
-		}
-
 		/// <summary>
 		/// Gets a singleton instance of SortingTests.
 		/// </summary>
@@ -73,13 +71,12 @@ namespace Testing.AlgorithmsTests.SortingTests
 		{
 			get
 			{
-				if (instance != null) return instance;
-
-				lock (SyncLock)
+				if (instance == null)
 				{
-					if (instance == null)
+					lock (SyncLock)
 					{
-						instance = new SortingTests();
+						if (instance == null)
+							instance = new SortingTests();
 					}
 				}
 
@@ -88,85 +85,49 @@ namespace Testing.AlgorithmsTests.SortingTests
 		}
 
 		/// <summary>
-		/// Gets a list of 25 random integers.
+		/// Gets a list of random integers according to <value>SizeOfList1</value>.
 		/// </summary>
-		/// <returns>Copy of the random25 list.</returns>
-		public List<int> GetRandom25()
-		{
-			return new List<int>(this.random25);
-		}
+		public List<int> GetRandomList1() => new List<int>(this.randomList1);
 
 		/// <summary>
-		/// Gets a list of 25 ordered integers.
+		/// Gets a list of ordered integers according to <value>SizeOfList1</value>.
 		/// </summary>
-		/// <returns>Copy of the ordered25 list.</returns>
-		public List<int> GetOrdered25()
-		{
-			return new List<int>(this.ordered25);
-		}
+		public List<int> GetOrderedList1() => new List<int>(this.orderedList1);
 
 		/// <summary>
-		/// Gets a list of 25 reverse ordered integers.
+		/// Gets a list of reverse ordered integers according to <value>SizeOfList1</value>.
 		/// </summary>
-		/// <returns>Copy of the reversed25 list.</returns>
-		public List<int> GetReversed25()
-		{
-			return new List<int>(this.reversed25);
-		}
+		public List<int> GetReversedList1() => new List<int>(this.reversedList1);
 
 		/// <summary>
-		/// Gets a list of 50 random integers.
+		/// Gets a list of random integers according to <value>SizeOfList2</value>.
 		/// </summary>
-		/// <returns>Copy of the random50 list.</returns>
-		public List<int> GetRandom50()
-		{
-			return new List<int>(this.random50);
-		}
+		public List<int> GetRandomList2() => new List<int>(this.randomList2);
 
 		/// <summary>
-		/// Gets a list of 50 ordered integers.
+		/// Gets a list of ordered integers according to <value>SizeOfList2</value>.
 		/// </summary>
-		/// <returns>Copy of the ordered50 list.</returns>
-		public List<int> GetOrdered50()
-		{
-			return new List<int>(this.ordered50);
-		}
+		public List<int> GetOrderedList2() => new List<int>(this.orderedList2);
 
 		/// <summary>
-		/// Gets a list of 50 reverse ordered integers.
+		/// Gets a list of reverse ordered integers according to <value>SizeOfList2</value>.
 		/// </summary>
-		/// <returns>Copy of the reversed50 list.</returns>
-		public List<int> GetReversed50()
-		{
-			return new List<int>(this.reversed50);
-		}
+		public List<int> GetReversedList2() => new List<int>(this.reversedList2);
 
 		/// <summary>
-		/// Gets a list of 100 random integers.
+		/// Gets a list of random integers according to <value>SizeOfList3</value>.
 		/// </summary>
-		/// <returns>Copy of the random100 list.</returns>
-		public List<int> GetRandom100()
-		{
-			return new List<int>(this.random100);
-		}
+		public List<int> GetRandomList3() => new List<int>(this.randomList3);
 
 		/// <summary>
-		/// Gets a list of 100 ordered integers.
+		/// Gets a list of ordered integers according to <value>SizeOfList3</value>.
 		/// </summary>
-		/// <returns>Copy of the ordered100 list.</returns>
-		public List<int> GetOrdered100()
-		{
-			return new List<int>(this.ordered100);
-		}
+		public List<int> GetOrderedList3() => new List<int>(this.orderedList3);
 
 		/// <summary>
-		/// Gets a list of 100 reverse ordered integers.
+		/// Gets a list of reverse ordered integers according to <value>SizeOfList3</value>.
 		/// </summary>
-		/// <returns>Copy of the reversed100 list.</returns>
-		public List<int> GetReversed100()
-		{
-			return new List<int>(this.reversed100);
-		}
+		public List<int> GetReversedList3() => new List<int>(this.reversedList3);
 
 		/// <inheritdoc/>
 		public void Dispose()
@@ -175,127 +136,244 @@ namespace Testing.AlgorithmsTests.SortingTests
 			GC.SuppressFinalize(this);
 		}
 
-		private static Dictionary<string, string> GetDirectoryPaths(
-			int sizeOfList)
+		private static Dictionary<string, string> GetDirectoryPaths()
 		{
 			string root = Environment.GetFolderPath(
 				Environment.SpecialFolder.Personal) +
 				$@"\Algorithms-In-C-Sharp-Generated-Files";
+
 			string lists = $@"{root}\Lists\";
-			Dictionary<string, string> paths =
-				new Dictionary<string, string>
+
+			Dictionary<string, string> paths = new Dictionary<string, string>
+			{
 				{
-					{
-						"root",
-						root
-					},
-					{
-						"lists",
-						lists
-					},
-					{
-						"randomListFile",
-						$@"{lists}\{sizeOfList}_random.bin"
-					},
-					{
-						"orderedListFile",
-						$@"{lists}\{sizeOfList}_ordered.bin"
-					},
-					{
-						"reversedListFile",
-						$@"{lists}\{sizeOfList}_reversed.bin"
-					},
-				};
+					"root",
+					root
+				},
+				{
+					"lists",
+					lists
+				},
+				{
+					$"randomListFile{SizeOfList1}",
+					$@"{lists}\{SizeOfList1}_random.bin"
+				},
+				{
+					$"orderedListFile{SizeOfList1}",
+					$@"{lists}\{SizeOfList1}_ordered.bin"
+				},
+				{
+					$"reversedListFile{SizeOfList1}",
+					$@"{lists}\{SizeOfList1}_reversed.bin"
+				},
+				{
+					$"randomListFile{SizeOfList2}",
+					$@"{lists}\{SizeOfList2}_random.bin"
+				},
+				{
+					$"orderedListFile{SizeOfList2}",
+					$@"{lists}\{SizeOfList2}_ordered.bin"
+				},
+				{
+					$"reversedListFile{SizeOfList2}",
+					$@"{lists}\{SizeOfList2}_reversed.bin"
+				},
+				{
+					$"randomListFile{SizeOfList3}",
+					$@"{lists}\{SizeOfList3}_random.bin"
+				},
+				{
+					$"orderedListFile{SizeOfList3}",
+					$@"{lists}\{SizeOfList3}_ordered.bin"
+				},
+				{
+					$"reversedListFile{SizeOfList3}",
+					$@"{lists}\{SizeOfList3}_reversed.bin"
+				},
+			};
 
 			return paths;
 		}
 
-		private List<int> GetListFromFile(int sizeOfList, ListStyles style)
+		private void GenerateDirectories()
 		{
-			Dictionary<string, string> paths = GetDirectoryPaths(sizeOfList);
-
 			// Check if directories exist and if not create them.
-			if (!Directory.Exists(paths["root"]))
+			if (!Directory.Exists(Paths["root"]))
 			{
-				Directory.CreateDirectory(paths["root"]);
+				Directory.CreateDirectory(Paths["root"]);
 			}
 
-			if (!Directory.Exists(paths["lists"]))
+			if (!Directory.Exists(Paths["lists"]))
 			{
-				Directory.CreateDirectory(paths["lists"]);
+				Directory.CreateDirectory(Paths["lists"]);
+			}
+		}
+
+		private void PopulateLists()
+		{
+			string randomPath1 = Paths[$"randomListFile{SizeOfList1}"];
+			string orderedPath1 = Paths[$"orderedListFile{SizeOfList1}"];
+			string reversedPath1 = Paths[$"reversedListFile{SizeOfList1}"];
+
+			string randomPath2 = Paths[$"randomListFile{SizeOfList2}"];
+			string orderedPath2 = Paths[$"orderedListFile{SizeOfList2}"];
+			string reversedPath2 = Paths[$"reversedListFile{SizeOfList2}"];
+
+			string randomPath3 = Paths[$"randomListFile{SizeOfList3}"];
+			string orderedPath3 = Paths[$"orderedListFile{SizeOfList3}"];
+			string reversedPath3 = Paths[$"reversedListFile{SizeOfList3}"];
+
+			// XOR check to see if any files are missing. If one or two files of
+			// the required three are missing, then the remaining files are
+			// removed.
+			if (!File.Exists(randomPath1) ^ !File.Exists(orderedPath1) ^ !File.Exists(reversedPath1) ^
+				!File.Exists(randomPath2) ^ !File.Exists(orderedPath2) ^ !File.Exists(reversedPath2) ^
+				!File.Exists(randomPath3) ^ !File.Exists(orderedPath3) ^ !File.Exists(reversedPath3))
+			{
+				if (File.Exists(randomPath1)) File.Delete(randomPath1);
+				if (File.Exists(orderedPath1)) File.Delete(orderedPath1);
+				if (File.Exists(reversedPath1)) File.Delete(reversedPath1);
+				if (File.Exists(randomPath2)) File.Delete(randomPath2);
+				if (File.Exists(orderedPath2)) File.Delete(orderedPath2);
+				if (File.Exists(reversedPath2)) File.Delete(reversedPath2);
+				if (File.Exists(randomPath3)) File.Delete(randomPath3);
+				if (File.Exists(orderedPath3)) File.Delete(orderedPath3);
+				if (File.Exists(reversedPath3)) File.Delete(reversedPath3);
 			}
 
-			List<int> randomList, orderedList, reversedList;
-
-			string randomPath = paths["randomListFile"];
-			string orderedPath = paths["orderedListFile"];
-			string reversedPath = paths["reversedListFile"];
-
-			if (!File.Exists(randomPath))
+			// Checks if one file exists, due to previous check if one exists,
+			// all other files do too.
+			if (!File.Exists(randomPath1))
 			{
-				int min = sizeOfList - (3 * sizeOfList);
-				int max = 2 * sizeOfList;
+				this.randomList1 = new List<int>();
+				this.randomList2 = new List<int>();
+				this.randomList3 = new List<int>();
 
-				randomList = new List<int>();
-				Random rand = new Random();
+				foreach (int size in ListSizes)
+				{
+					List<int> listToFill = new List<int>();
+					switch (size)
+					{
+						case SizeOfList1:
+							listToFill = this.randomList1;
+							break;
+						case SizeOfList2:
+							listToFill = this.randomList2;
+							break;
+						case SizeOfList3:
+							listToFill = this.randomList3;
+							break;
+					}
 
-				for (int i = 0; i < sizeOfList; i++)
-					randomList.Add(rand.Next(min, max));
+					for (int i = 0; i < size; i++)
+					{
+						int min = size - (3 * size);
+						int max = 2 * size;
 
-				Stream stream = File.Open(randomPath, FileMode.Create);
+						Random rand = new Random();
+						listToFill.Add(rand.Next(min, max));
+					}
+				}
+
+				this.orderedList1 = new List<int>(this.randomList1);
+				this.orderedList1.Sort();
+
+				this.orderedList2 = new List<int>(this.randomList2);
+				this.orderedList2.Sort();
+
+				this.orderedList3 = new List<int>(this.randomList3);
+				this.orderedList3.Sort();
+
+				this.reversedList1 = new List<int>(this.orderedList1);
+				this.reversedList1.Reverse();
+
+				this.reversedList2 = new List<int>(this.orderedList2);
+				this.reversedList2.Reverse();
+
+				this.reversedList3 = new List<int>(this.orderedList3);
+				this.reversedList3.Reverse();
+
 				BinaryFormatter bin = new BinaryFormatter();
-				bin.Serialize(stream, randomList);
+				Stream stream;
+
+				stream = File.Open(randomPath1, FileMode.Create);
+				bin.Serialize(stream, this.randomList1);
+				stream.Dispose();
+
+				stream = File.Open(randomPath2, FileMode.Create);
+				bin.Serialize(stream, this.randomList2);
+				stream.Dispose();
+
+				stream = File.Open(randomPath3, FileMode.Create);
+				bin.Serialize(stream, this.randomList3);
+				stream.Dispose();
+
+				stream = File.Open(orderedPath1, FileMode.Create);
+				bin.Serialize(stream, this.orderedList1);
+				stream.Dispose();
+
+				stream = File.Open(orderedPath2, FileMode.Create);
+				bin.Serialize(stream, this.orderedList2);
+				stream.Dispose();
+
+				stream = File.Open(orderedPath3, FileMode.Create);
+				bin.Serialize(stream, this.orderedList3);
+				stream.Dispose();
+
+				stream = File.Open(reversedPath1, FileMode.Create);
+				bin.Serialize(stream, this.reversedList1);
+				stream.Dispose();
+
+				stream = File.Open(reversedPath2, FileMode.Create);
+				bin.Serialize(stream, this.reversedList2);
+				stream.Dispose();
+
+				stream = File.Open(reversedPath3, FileMode.Create);
+				bin.Serialize(stream, this.reversedList3);
 				stream.Close();
 			}
 			else
 			{
-				Stream stream = File.Open(randomPath, FileMode.Open);
 				BinaryFormatter bin = new BinaryFormatter();
-				randomList = (List<int>)bin.Deserialize(stream);
+				Stream stream;
+
+				stream = File.Open(randomPath1, FileMode.Open);
+				this.randomList1 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(randomPath2, FileMode.Open);
+				this.randomList2 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(randomPath3, FileMode.Open);
+				this.randomList3 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(orderedPath1, FileMode.Open);
+				this.orderedList1 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(orderedPath2, FileMode.Open);
+				this.orderedList2 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(orderedPath3, FileMode.Open);
+				this.orderedList3 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(reversedPath1, FileMode.Open);
+				this.reversedList1 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(reversedPath2, FileMode.Open);
+				this.reversedList2 = (List<int>)bin.Deserialize(stream);
+				stream.Dispose();
+
+				stream = File.Open(reversedPath3, FileMode.Open);
+				this.reversedList3 = (List<int>)bin.Deserialize(stream);
+
 				stream.Close();
 			}
-
-			if (!File.Exists(orderedPath))
-			{
-				orderedList = new List<int>(randomList);
-				orderedList.Sort();
-
-				Stream stream = File.Open(orderedPath, FileMode.Create);
-				BinaryFormatter bin = new BinaryFormatter();
-				bin.Serialize(stream, orderedList);
-				stream.Close();
-			}
-			else
-			{
-				Stream stream = File.Open(orderedPath, FileMode.Open);
-				BinaryFormatter bin = new BinaryFormatter();
-				orderedList = (List<int>)bin.Deserialize(stream);
-				stream.Close();
-			}
-
-			if (!File.Exists(reversedPath))
-			{
-				reversedList = new List<int>(orderedList);
-				reversedList.Reverse();
-
-				Stream stream = File.Open(reversedPath, FileMode.Create);
-				BinaryFormatter bin = new BinaryFormatter();
-				bin.Serialize(stream, reversedList);
-				stream.Close();
-			}
-			else
-			{
-				Stream stream = File.Open(reversedPath, FileMode.Open);
-				BinaryFormatter bin = new BinaryFormatter();
-				reversedList = (List<int>)bin.Deserialize(stream);
-				stream.Close();
-			}
-
-			if (style == ListStyles.Random) return randomList;
-			if (style == ListStyles.Ordered) return orderedList;
-			if (style == ListStyles.Reversed) return reversedList;
-
-			return new List<int>();
 		}
 
 		private void Dispose(bool disposing)

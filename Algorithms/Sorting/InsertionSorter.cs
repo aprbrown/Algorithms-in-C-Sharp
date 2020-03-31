@@ -1,4 +1,12 @@
-﻿namespace Algorithms.Sorting
+﻿// -----------------------------------------------------------------------------
+// <copyright file="InsertionSorter.cs" company="Andrew P R Brown">
+// Copyright (c) Andrew P R Brown. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full
+// license information.
+// </copyright>
+// -----------------------------------------------------------------------------
+
+namespace Algorithms.Sorting
 {
 	using System;
 	using System.Collections.Generic;
