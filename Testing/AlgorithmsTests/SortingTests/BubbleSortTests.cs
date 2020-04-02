@@ -19,7 +19,7 @@ namespace Testing.AlgorithmsTests.SortingTests
 	/// </summary>
 	public class BubbleSortTests
 	{
-		private static readonly SortingTests Lists = SortingTests.Instance;
+		private static SortingTests Lists = new SortingTests();
 		private readonly ITestOutputHelper output;
 
 		/// <summary>
@@ -35,17 +35,17 @@ namespace Testing.AlgorithmsTests.SortingTests
 		public static IEnumerable<object[]> BubbleSortDataAscending =>
 			new List<object[]>
 		{
-			new object[] { Lists.GetRandomList1(), Lists.GetOrderedList1() },
-			new object[] { Lists.GetRandomList2(), Lists.GetOrderedList2() },
-			new object[] { Lists.GetRandomList3(), Lists.GetOrderedList3() },
+			new object[] { Lists.GetRandomList25(), Lists.GetOrderedList25() },
+			new object[] { Lists.GetRandomList50(), Lists.GetOrderedList50() },
+			new object[] { Lists.GetRandomList100(), Lists.GetOrderedList100() },
 		};
 
 		public static IEnumerable<object[]> BubbleSortDataDescending =>
 			new List<object[]>
 		{
-			new object[] { Lists.GetRandomList1(), Lists.GetReversedList1() },
-			new object[] { Lists.GetRandomList2(), Lists.GetReversedList2() },
-			new object[] { Lists.GetRandomList3(), Lists.GetReversedList3() },
+			new object[] { Lists.GetRandomList25(), Lists.GetReversedList25() },
+			new object[] { Lists.GetRandomList50(), Lists.GetReversedList50() },
+			new object[] { Lists.GetRandomList100(), Lists.GetReversedList100() },
 		};
 
 		[Theory]
