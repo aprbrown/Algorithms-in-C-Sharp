@@ -12,8 +12,12 @@ namespace Benchmarks
 	using Algorithms.Sorting;
 	using BenchmarkDotNet.Attributes;
 	using BenchmarkDotNet.Order;
-	using Benchmarks.Helpers;
 
+	/// <summary>
+	/// A class to benchmark sorting algorithms against a list of reverse
+	/// ordered integers, this can highlight worst case performance in some
+	/// algorithms.
+	/// </summary>
 	[MemoryDiagnoser]
 	[Orderer(SummaryOrderPolicy.FastestToSlowest, MethodOrderPolicy.Declared)]
 	[RankColumn]
@@ -29,12 +33,19 @@ namespace Benchmarks
 		private List<int> quickSort;
 		private List<int> bubbleSort;
 
+		/// <summary>
+		/// A setup operation to generate an instance of the Benchmarks class.
+		/// </summary>
 		[GlobalSetup]
-		public void GlobalSetup()
+		public static void GlobalSetup()
 		{
 			instance = Benchmarks.Instance;
 		}
 
+		/// <summary>
+		/// A setup operation for each iterations of the benchmark. This resets
+		/// each list to the reference list.
+		/// </summary>
 		[IterationSetup]
 		public void IterationSetup()
 		{
