@@ -13,14 +13,17 @@ namespace Benchmarks
 	using System.Globalization;
 	using System.IO;
 	using BenchmarkDotNet.Running;
-	using Benchmarks.Helpers;
 
 	/// <summary>
 	/// Main program for benchmarks to be run.
 	/// </summary>
 	public static class Program
 	{
-		private static CultureInfo culture = new CultureInfo("en-GB");
+		private const bool RunRandomBenchmark = true;
+		private const bool RunOrderedBenchmark = true;
+		private const bool RunReversedBenchmark = true;
+
+		private static readonly CultureInfo Culture = new CultureInfo("en-GB");
 
 		/// <summary>
 		/// Main program to run benchmarks against the implemented algorithms
@@ -43,23 +46,45 @@ namespace Benchmarks
 			if (!Directory.Exists(paths["md"]))
 				Directory.CreateDirectory(paths["md"]);
 
-			// Start benchmark runner for Random Lists.
-			var randomListSummary =
-				BenchmarkRunner.Run<SortingRandomList>();
-			Console.WriteLine(randomListSummary);
+			string reportsPath;
 
-			// Start benchmark runner for Ordered Arrays.
-			var orderedListSummary =
-				BenchmarkRunner.Run<SortingOrderedList>();
-			Console.WriteLine(orderedListSummary);
+			if (RunRandomBenchmark)
+			{
+				// Start benchmark runner for Random Lists.
+				var randomListSummary =
+					BenchmarkRunner.Run<SortingRandomList>();
+				Console.WriteLine(randomListSummary);
 
-			// Start benchmark runner for Reversed Arrays.
-			var reversedListSummary =
-				BenchmarkRunner.Run<SortingReversedList>();
-			Console.WriteLine(reversedListSummary);
+				reportsPath = randomListSummary.ResultsDirectoryPath;
+				MoveReports(reportsPath, paths);
+			}
 
-			string reportsPath = reversedListSummary.ResultsDirectoryPath;
+			if (RunOrderedBenchmark)
+			{
+				// Start benchmark runner for Ordered Arrays.
+				var orderedListSummary =
+					BenchmarkRunner.Run<SortingOrderedList>();
+				Console.WriteLine(orderedListSummary);
 
+				reportsPath = orderedListSummary.ResultsDirectoryPath;
+				MoveReports(reportsPath, paths);
+			}
+
+			if (RunReversedBenchmark)
+			{
+				// Start benchmark runner for Reversed Arrays.
+				var reversedListSummary =
+					BenchmarkRunner.Run<SortingReversedList>();
+				Console.WriteLine(reversedListSummary);
+
+				reportsPath = reversedListSummary.ResultsDirectoryPath;
+				MoveReports(reportsPath, paths);
+			}
+		}
+
+		private static void MoveReports(
+			string reportsPath, Dictionary<string, string> paths)
+		{
 			// Move resulting benchmark results to a new folder organised by
 			// array size and the date and time benchmark was run.
 			if (Directory.Exists(reportsPath))
@@ -71,19 +96,19 @@ namespace Benchmarks
 					string fileName = Path.GetFileName(s);
 					string sourcePath = Path.GetFullPath(s);
 
-					if (fileName.EndsWith(".csv", true, culture))
+					if (fileName.EndsWith(".csv", true, Culture))
 					{
 						string destPath = Path.Combine(paths["csv"], fileName);
 						File.Move(sourcePath, destPath, true);
 					}
 
-					if (fileName.EndsWith(".html", true, culture))
+					if (fileName.EndsWith(".html", true, Culture))
 					{
 						string destPath = Path.Combine(paths["html"], fileName);
 						File.Move(sourcePath, destPath, true);
 					}
 
-					if (fileName.EndsWith(".md", true, culture))
+					if (fileName.EndsWith(".md", true, Culture))
 					{
 						string destPath = Path.Combine(paths["md"], fileName);
 						File.Move(sourcePath, destPath, true);

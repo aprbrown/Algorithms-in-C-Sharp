@@ -57,7 +57,7 @@ namespace Benchmarks
 		/// <summary>
 		/// Gets the size of the list for benchmarks to be ran against.
 		/// </summary>
-		internal static int SizeOfList { get; } = 250_000;
+		internal static int SizeOfList { get; } = 2000;
 
 		/// <summary>
 		/// Gets a copy of randomList.

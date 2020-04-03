@@ -18,6 +18,11 @@
     <CodeAnalysisRuleSet>..\Testing\Testing.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Helpers\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Helpers\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="stylecop.json" />
   </ItemGroup>
   <ItemGroup>

@@ -31,11 +31,7 @@ one another to check performance.
 
 - Bubble Sort (Ascending and Descending)
 
-### Insertion and Merging
-
-### Insertion and Selection
-
-### Partitioning and Selection
+### Hybrid Methods
 
 ---
 
