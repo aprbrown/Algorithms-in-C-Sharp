@@ -6,36 +6,36 @@
 // </copyright>
 // -----------------------------------------------------------------------------
 
-namespace Testing.AlgorithmsTests.SortingTests
+namespace Testing.AlgorithmsTests.SortingTesters
 {
 	using System.Collections.Generic;
+	using Xunit.Abstractions;
 
 	/// <summary>
-	/// To facilitate testing of sorting on lists of integers, this class will
-	/// return copies of the lists to ensure each test gets the same list to
-	/// test on.
+	/// Abstract class to facilitate the creation of tests for sorting
+	/// algorithms.
 	/// </summary>
-	internal sealed class SortingTests
+	public abstract class SortingTests
 	{
-		private List<int> randomList25 = new List<int>
+		private static List<int> randomList25 = new List<int>
 		{
 			44, -41, -30, -19, 0, 32, 0, -47, 20, 48, -21, 39, -14, 20, 35, 24,
 			-17, 36, -15, 24, 44, 8, 48, -50, 14,
 		};
 
-		private List<int> orderedList25 = new List<int>
+		private static List<int> orderedList25 = new List<int>
 		{
 			-50, -47, -41, -30, -21, -19, -17, -15, -14, 0, 0, 8, 14, 20, 20,
 			24, 24, 32, 35, 36, 39, 44, 44, 48, 48,
 		};
 
-		private List<int> reversedList25 = new List<int>
+		private static List<int> reversedList25 = new List<int>
 		{
 			48, 48, 44, 44, 39, 36, 35, 32, 24, 24, 20, 20, 14, 8, 0, 0, -14,
 			-15, -17, -19, -21, -30, -41, -47, -50,
 		};
 
-		private List<int> randomList50 = new List<int>
+		private static List<int> randomList50 = new List<int>
 		{
 			86, 52, -14, -47, 65, 9, 79, -52, -66, 56, 10, -38, -79, 75, 72, 3,
 			85, 48, 62, 66, 76, -12, -21, 58, -96, 64, -95, -3, -17, 64, -83,
@@ -43,7 +43,7 @@ namespace Testing.AlgorithmsTests.SortingTests
 			90, 42, -56, 91,
 		};
 
-		private List<int> orderedList50 = new List<int>
+		private static List<int> orderedList50 = new List<int>
 		{
 			-96, -95, -95, -83, -79, -76, -69, -68, -66, -56, -52, -47, -40,
 			-38, -26, -21, -20, -17, -14, -12, -3, -2, 3, 9, 10, 21, 30, 42, 48,
@@ -51,7 +51,7 @@ namespace Testing.AlgorithmsTests.SortingTests
 			85, 86, 90, 91,
 		};
 
-		private List<int> reversedList50 = new List<int>
+		private static List<int> reversedList50 = new List<int>
 		{
 			91, 90, 86, 85, 85, 83, 79, 76, 75, 72, 68, 66, 65, 64, 64, 62, 58,
 			58, 58, 56, 52, 48, 42, 30, 21, 10, 9, 3, -2, -3, -12, -14, -17,
@@ -59,19 +59,19 @@ namespace Testing.AlgorithmsTests.SortingTests
 			-83, -95, -95, -96,
 		};
 
-		private List<int> randomList100 = new List<int>
+		private static List<int> randomList100 = new List<int>
 		{
 			96, 28, 159, 161, -7, -115, -164, -54, 189, 92, -103, -147, 20,
 			-170, -31, -25, -156, -27, -79, 118, -21, -134, 144, -51, -27, -106,
 			-98, -11, -3, 35, 37, -184, 196, -126, 123, -104, 68, 101, 56, 125,
 			-30, -139, -103, 41, 57, 85, 19, 26, 181, -75, 109, -102, -146,
 			-139, -106, -80, -26, -100, -122, 189, 73, -63, 39, -156, 145, 171,
-			147, -164,197, 163, -3, -167, 7, -114, -163, -192, 59, 192, -18,
+			147, -164, 197, 163, -3, -167, 7, -114, -163, -192, 59, 192, -18,
 			-22, -35, -34, -102, 162, 15, -171, 52, 25, 70, -107, 11, -142, -87,
 			-43, 142, 123, -88, 143, -13, -24,
 		};
 
-		private List<int> orderedList100 = new List<int>
+		private static List<int> orderedList100 = new List<int>
 		{
 			-192, -184, -171, -170, -167, -164, -164, -163, -156, -156, -147,
 			-146, -142, -139, -139, -134, -126, -122, -115, -114, -107, -106,
@@ -83,7 +83,7 @@ namespace Testing.AlgorithmsTests.SortingTests
 			163, 171, 181, 189, 189, 192, 196, 197,
 		};
 
-		private List<int> reversedList100 = new List<int>
+		private static List<int> reversedList100 = new List<int>
 		{
 			197, 196, 192, 189, 189, 181, 171, 163, 162, 161, 159, 147, 145,
 			144, 143, 142, 125, 123, 123, 118, 109, 101, 96, 92, 85, 73, 70, 68,
@@ -98,60 +98,134 @@ namespace Testing.AlgorithmsTests.SortingTests
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SortingTests"/> class.
 		/// </summary>
-		public SortingTests() { }
+		/// <param name="output">Instance of ITestOutputHelper allowing tests to
+		/// show additional information.</param>
+		public SortingTests(ITestOutputHelper output)
+		{
+			this.Output = output;
+		}
+
+		/// <summary>
+		/// Gets an array containing the random list the sorting algorithm is
+		/// being applied to and the reference sorted list to be compared with.
+		/// </summary>
+		public static IEnumerable<object[]> GetDataForAscendingSort =>
+			new List<object[]>
+		{
+			new object[] { GetRandomList25(), GetOrderedList25() },
+			new object[] { GetRandomList50(), GetOrderedList50() },
+			new object[] { GetRandomList100(), GetOrderedList100() },
+		};
+
+		/// <summary>
+		/// Gets an array containing the random list the sorting algorithm is
+		/// being applied to and the reference reverse sorted list to be
+		/// compared with.
+		/// </summary>
+		public static IEnumerable<object[]> GetDataForDescendingSort =>
+			new List<object[]>
+		{
+			new object[] { GetRandomList25(), GetReversedList25() },
+			new object[] { GetRandomList50(), GetReversedList50() },
+			new object[] { GetRandomList100(), GetReversedList100() },
+		};
+
+		/// <summary>
+		/// Gets an instance of ITestOutputHelper.
+		/// </summary>
+		internal ITestOutputHelper Output { get; }
 
 		/// <summary>
 		/// Gets a copy of randomList25.
 		/// </summary>
 		/// <returns>A List of 25 randomly ordered integers.</returns>
-		public List<int> GetRandomList25() => new List<int>(this.randomList25);
+		public static List<int> GetRandomList25()
+			=> new List<int>(randomList25);
 
 		/// <summary>
 		/// Gets a copy of orderedList25.
 		/// </summary>
 		/// <returns>A List of 25 ordered integers.</returns>
-		public List<int> GetOrderedList25() => new List<int>(this.orderedList25);
+		public static List<int> GetOrderedList25()
+			=> new List<int>(orderedList25);
 
 		/// <summary>
 		/// Gets a copy of reversedList25.
 		/// </summary>
 		/// <returns>A List of 25 reverse ordered integers.</returns>
-		public List<int> GetReversedList25() => new List<int>(this.reversedList25);
+		public static List<int> GetReversedList25()
+			=> new List<int>(reversedList25);
 
 		/// <summary>
 		/// Gets a copy of randomList50.
 		/// </summary>
 		/// <returns>A List of 50 randomly ordered integers.</returns>
-		public List<int> GetRandomList50() => new List<int>(this.randomList50);
+		public static List<int> GetRandomList50()
+			=> new List<int>(randomList50);
 
 		/// <summary>
 		/// Gets a copy of orderedList50.
 		/// </summary>
 		/// <returns>A List of 50 ordered integers.</returns>
-		public List<int> GetOrderedList50() => new List<int>(this.orderedList50);
+		public static List<int> GetOrderedList50()
+			=> new List<int>(orderedList50);
 
 		/// <summary>
 		/// Gets a copy of reversedList50.
 		/// </summary>
 		/// <returns>A List of 50 reverse ordered integers.</returns>
-		public List<int> GetReversedList50() => new List<int>(this.reversedList50);
+		public static List<int> GetReversedList50()
+			=> new List<int>(reversedList50);
 
 		/// <summary>
 		/// Gets a copy of randomList100.
 		/// </summary>
 		/// <returns>A List of 100 randomly ordered integers.</returns>
-		public List<int> GetRandomList100() => new List<int>(this.randomList100);
+		public static List<int> GetRandomList100()
+			=> new List<int>(randomList100);
 
 		/// <summary>
 		/// Gets a copy of orderedList100.
 		/// </summary>
 		/// <returns>A List of 100 ordered integers.</returns>
-		public List<int> GetOrderedList100() => new List<int>(this.orderedList100);
+		public static List<int> GetOrderedList100()
+			=> new List<int>(orderedList100);
 
 		/// <summary>
 		/// Gets a copy of reversedList100.
 		/// </summary>
 		/// <returns>A List of 100 reverse ordered integers.</returns>
-		public List<int> GetReversedList100() => new List<int>(this.reversedList100);
+		public static List<int> GetReversedList100()
+			=> new List<int>(reversedList100);
+
+		/// <summary>
+		/// Test each list from GetDataForAscendingSort with the sorting
+		/// algorithm to validate that it sorts items in ascending order.
+		/// </summary>
+		/// <param name="random">List of randomly sorted Integers.</param>
+		/// <param name="ordered">List of ordered Integers.</param>
+		public abstract void SortListsInAscendingOrder(
+			IList<int> random, IList<int> ordered);
+
+		/// <summary>
+		/// Tests each list from GetDataForDescendingSort with the sorting
+		/// algorithm to validate that it sorts items in descending order when
+		/// the descending attribute is set to true.
+		/// </summary>
+		/// <param name="random">List of randomly sorted Integers.</param>
+		/// <param name="reversed">List of reverse ordered Integers.</param>
+		public abstract void SortListsInDescendingOrder(
+			IList<int> random, IList<int> reversed);
+
+		/// <summary>
+		/// Test that calling the sort on null remains a null.
+		/// </summary>
+		public abstract void CallingSortOnANullReturnsNull();
+
+		/// <summary>
+		/// Test that calling the sort on an Empty array results in an empty
+		/// array.
+		/// </summary>
+		public abstract void CallingSortOnAnEmptyListRemainsEmpty();
 	}
 }
